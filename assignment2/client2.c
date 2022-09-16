@@ -9,6 +9,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <signal.h>
 #include "inet.h"
 
 int get_response(void);

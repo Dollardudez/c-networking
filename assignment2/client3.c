@@ -6,6 +6,7 @@
 #include <sys/types.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <signal.h>
 #include "inet.h"
 
 int get_response(void);
