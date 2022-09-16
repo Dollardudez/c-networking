@@ -83,7 +83,7 @@ int main(int argc, char **argv)
                 rand_int = rand() % 31;
                 sprintf(buff, "%d", rand_int);
                 strcpy(command,"Random int (1-30): ");
-                snprintf(s, MAX, "%s%s", command, buff);
+                snprintf(s, 200, "%s%s", command, buff);
                 break;
 
             case '4': 
