@@ -68,14 +68,14 @@ int main(int argc, char **argv)
             case '1':
                 strftime(buff,MAX,"%T",timeptr);
                 strcpy(command,"Current time: ");
-                snprintf(s, MAX, "%s%s", command, buff);
+                snprintf(s, 200, "%s%s", command, buff);
 	            break;
 
             case '2': 
                 my_pid = getpid();
                 sprintf(buff, "%d", my_pid);
                 strcpy(command,"PID of server: ");
-                snprintf(s, MAX, "%s%s", command, buff);
+                snprintf(s, 200, "%s%s", command, buff);
                 break;
 
             case '3': 
