@@ -4,7 +4,7 @@
 LIBS	= 
 CFLAGS	= -g -ggdb -std=c99
 
-all:	udp tcp 
+all:	udp 
 
 #
 # Internet stream version (TCP protocol).

@@ -1,6 +1,9 @@
 /*-------------------------------------------------------------*/
 /* client.c - sample time/date client.                         */
 /*-------------------------------------------------------------*/
+
+//COMMAND > /dev/null 2>&1 & disown
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -29,7 +32,7 @@ int main(int argc, char **argv)
     config_connection();
 
     /* Display the menu, read user's response, and send it to the server. */
-    while((response = get_response()) != 4) {
+    while((response = get_response())) {
 
         /* Send the user's response to the server. */
         servlen = sizeof(serv_addr);
@@ -37,9 +40,16 @@ int main(int argc, char **argv)
         sendto (sockfd, (char *) &request, sizeof(request), 0,
                     (struct sockaddr *) &serv_addr, servlen);
 
-        /* Read the server's response. */
+        if(response == 4){
+            printf("Shutting down server...\n");
+            printf("Goodbye!");
+            break;
+        }
+
+                /* Read the server's response. */
         nread = recvfrom(sockfd, s, MAX, 0,
                     (struct sockaddr *) &serv_addr, &servlen);
+
         if (nread > 0) {
             printf("   %s\n", s);
         } 
@@ -104,6 +114,33 @@ void handle_sigint(int sig)
     char request = (char)(response);
     printf("\nCaught signal %d\n", sig);
     printf("Shutting down server\n");
+    
+    
+    /* Set up the address of the server to be contacted. */
+    memset((char *) &serv_addr, 0, sizeof(serv_addr));
+    serv_addr.sin_family      = AF_INET;
+    serv_addr.sin_addr.s_addr = inet_addr(SERV_HOST_ADDR);
+    serv_addr.sin_port        = htons(SERV_UDP_PORT);
+
+    /* Set up the address of the client. */
+    memset((char *) &cli_addr, 0, sizeof(cli_addr));
+    cli_addr.sin_family      = AF_INET;
+    cli_addr.sin_addr.s_addr = htonl(0);
+    cli_addr.sin_port        = htons(0);
+
+    /* Create a socket (an endpoint for communication). */
+    if ( (sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
+        perror("client: can't open datagram socket");
+        exit(1);
+    }
+
+    /* Bind the client's socket to the client's address */
+    if (bind(sockfd, (struct sockaddr *) &cli_addr, sizeof(cli_addr)) < 0) {
+        perror("client: can't bind local address");
+        exit(1);
+    }
+
+    
 
     sendto(sockfd, (char *) &request, sizeof(request), 0,
                  (struct sockaddr *) &serv_addr, servlen);
@@ -136,5 +173,4 @@ void config_connection(){
         perror("client: can't bind local address");
         exit(1);
     }
-    printf("%s \n",inet_ntoa(cli_addr.sin_addr));
 }

@@ -71,6 +71,10 @@ int main(int argc, char **argv)
                 snprintf(s, MAX, "%s%s", command, buff);
                 break;
 
+            case '4': 
+                printf("Server shutting down.");
+                exit(0);
+                break;
             default: strcpy(s,"Invalid request\n");
                 break;
         }

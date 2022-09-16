@@ -12,8 +12,9 @@ int get_response(void);
 int readn(int, char *, int);
 void setup_server_addr();
 void connect_to_server();
+void handle_sigint(int sig);
 
-int sockfd;
+int sockfd, connfd;
 struct sockaddr_in  serv_addr;
 
 int main(int argc, char **argv)
@@ -22,17 +23,30 @@ int main(int argc, char **argv)
     int                 response;    /* user response        */
     int                 nread;       /* number of characters */
 
-    setup_server_addr();
-    /* Display the menu, read user's response, and send it to the server. */
-    while((response = get_response()) != 4) {
+    signal(SIGINT, handle_sigint);
 
+    /* Set up the address of the server to be contacted. */
+    memset((char *) &serv_addr, 0, sizeof(serv_addr));
+    serv_addr.sin_family      = AF_INET;
+    serv_addr.sin_addr.s_addr = inet_addr(SERV_HOST_ADDR);
+    serv_addr.sin_port        = htons(SERV_TCP_PORT);
+    /* Display the menu, read user's response, and send it to the server. */
+    while((response = get_response())) {
+        if(response == 0){
+            printf("You cant enter 0, dude\n");
+            continue;
+        }
         connect_to_server();
-        
+
         sprintf(s,"%d",response);
 
         /* Send the user's request to the server. */
         write (sockfd, s, sizeof(char));
-
+        if(response == 4){
+            printf("Shutting down server...\n");
+            printf("Goodbye!");
+            break;
+        }
         /* Read the server's reply. */
         nread = readn (sockfd, s, MAX);
         if (nread > 0) {
@@ -53,9 +67,9 @@ int get_response()
     printf("===========================================\n");
     printf("                   Menu: \n");
     printf("-------------------------------------------\n");
-    printf("                1. Date\n");
-    printf("                2. Time\n");
-    printf("                3. Both\n");
+    printf("                1. Current Time\n");
+    printf("                2. PID of the server\n");
+    printf("                3. Random number between 1 and 30, inclusive\n");
     printf("                4. Quit\n");
     printf("-------------------------------------------\n");
     printf("               Choice (1-4):");
@@ -92,6 +106,7 @@ register int	nbytes;
 }
 
 void setup_server_addr(){
+
     /* Set up the address of the server to be contacted. */
     memset((char *) &serv_addr, 0, sizeof(serv_addr));
     serv_addr.sin_family      = AF_INET;
@@ -113,4 +128,20 @@ void connect_to_server(){
         exit(1);
     }
 }
+
+void handle_sigint(int sig)
+{
+    char s[MAX];
+    int response = '0';
+    sprintf(s,"%1d",response);
+    printf("\nCaught signal %d\n", sig);
+    printf("Shutting down server\n");
+
+    connect_to_server();
+    write(sockfd, s, sizeof(char));
+
+    printf("Goodbye!\n");
+    exit(0);
+}
+
 

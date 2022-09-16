@@ -46,22 +46,26 @@ int main(int argc, char **argv)
     printf("%s \n",inet_ntoa(cli_addr.sin_addr));
 
     /* Display the menu, read user's response, and send it to the server. */
-    while((response = get_response()) != 4) {
-
+    while((response = get_response())) {
+        
         /* Send the user's response to the server. */
-	servlen = sizeof(serv_addr);
-	request = (char)('0' + response);
+        servlen = sizeof(serv_addr);
+        request = (char)('0' + response);
         sendto (sockfd, (char *) &request, sizeof(request), 0,
-                 (struct sockaddr *) &serv_addr, servlen);
-
+                (struct sockaddr *) &serv_addr, servlen);
+        if(response == 4){
+            printf("Shutting down server...\n");
+            printf("Goodbye!");
+            break;
+        }
         /* Read the server's response. */
         nread = recvfrom(sockfd, s, MAX, 0,
-                 (struct sockaddr *) &serv_addr, &servlen);
+                (struct sockaddr *) &serv_addr, &servlen);
         if (nread > 0) {
-			printf("   %s\n", s);
-	} else {
-		printf("Nothing read. \n");
-	}
+            printf("   %s\n", s);
+        } else {
+            printf("Nothing read. \n");
+        }
     }
     exit(0);  /* Exit if response is 4  */
 }

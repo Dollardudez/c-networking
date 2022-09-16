@@ -26,6 +26,7 @@ int main(int argc, char **argv)
     char                request;
 
     config_connection();
+    srand(time(0));
     for ( ; ; ) {
         
         /* Read the request from the client. */
@@ -57,10 +58,16 @@ int main(int argc, char **argv)
                 break;
 
             case '3': 
+                // more randomness
                 rand_int = rand() % 31;
                 sprintf(buff, "%d", rand_int);
                 strcpy(command,"Random int (1-30): ");
                 snprintf(s, MAX, "%s%s", command, buff);
+                break;
+
+            case '4': 
+                printf("Server shutting down.");
+                exit(0);
                 break;
 
             default: strcpy(s,"Invalid request\n");
@@ -91,5 +98,5 @@ void config_connection(){
         perror("server: can't bind local address");
         exit(1);
     }
-    printf("Server is running\n");
+    printf("Server is running: UDP\n");
 }
