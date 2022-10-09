@@ -11,23 +11,33 @@ void handle_sigint(int sig);
 
 char* port;
 int atoiport;
+char* portcopy;
 char* namecopy;
 SOCKET sockfd;
 int main(int argc, char* argv[]) {
 
-    
-    int len = strlen(argv[1]);
-    namecopy = malloc(len + 1);
-    strcpy(namecopy, argv[1]);
-
-    if (argc < 1) {
-        fprintf(stderr, "./chatClient \"Username\"\n");
+    if (argc < 3) {
+        fprintf(stderr, "./chatClient1 serverport \"username\"\n");
         return 1;
     }
-    if (argc > 2) {
-        fprintf(stderr, "Too many arguments. See Ya!\nDo this next time -> ./chatClient \"Username\"\n");
+    if (argc > 3) {
+        fprintf(stderr, "Too many arguments. See Ya!\nDo this next time -> ./chatClient1 serverport \"username\"\n");
         exit(0);
     }
+
+    if (strlen(argv[2]) > 20) {
+        printf("Cannot have more than 20 chars in Chatroom Name");
+        return 1;
+    }
+
+
+    int len = strlen(argv[1]);
+    portcopy = malloc(len + 1);
+    strcpy(portcopy, argv[1]);
+
+    len = strlen(argv[2]);
+    namecopy = malloc(len + 1);
+    strcpy(namecopy, argv[2]);
 
 
     printf("Configuring remote address...\n");
@@ -35,15 +45,21 @@ int main(int argc, char* argv[]) {
 
     struct sockaddr_in  serv_addr;
     memset((char*)&serv_addr, 0, sizeof(serv_addr));
+    short port;
+    sscanf(portcopy, "%hi", &port);
     serv_addr.sin_family = AF_INET;
+    serv_addr.sin_port = htons(port);     // short, network byte order
     serv_addr.sin_addr.s_addr = inet_addr(SERV_HOST_ADDR);
-    serv_addr.sin_port = htons(SERV_TCP_PORT);
 
-    printf("htons    %d\n", atoiport);
+    printf("htons -> %d\n", atoiport);
     if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
         perror("client: can't open stream socket");
         exit(1);
     }
+
+    char host[15];
+    inet_ntop(AF_INET, &(serv_addr.sin_addr.s_addr), host, INET_ADDRSTRLEN);
+    printf("Attempting connection to-> %s:%d\n", host, htons(serv_addr.sin_port));
     /* Connect to the server. */
     if (connect(sockfd, (struct sockaddr*)&serv_addr,
         sizeof(serv_addr)) < 0) {

@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     if (argc > 3) {
-        fprintf(stderr, "Too many arguments. See Ya!\nDo this next time -> ./chatClient \"Username\"\n");
+        fprintf(stderr, "Too many arguments. See Ya!\nDo this next time -> ./chatServer1 port \"Username\"\n");
         exit(0);
     }
 
@@ -52,7 +52,7 @@ int main(int argc, char* argv[]) {
     sscanf(portcopy, "%hi", &port);
     my_addr.sin_family = AF_INET;
     my_addr.sin_port = htons(port);     // short, network byte order
-    my_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    my_addr.sin_addr.s_addr = inet_addr(SERV_HOST_ADDR);
     memset(my_addr.sin_zero, '\0', sizeof my_addr.sin_zero);
 
     bind(socket_listen, (struct sockaddr*)&my_addr, sizeof my_addr);

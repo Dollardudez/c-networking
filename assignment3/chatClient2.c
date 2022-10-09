@@ -45,6 +45,7 @@ int main(int argc, char* argv[]) {
         perror("client: can't open stream socket");
         exit(1);
     }
+
     /* Connect to the server. */
     if (connect(sockfd, (struct sockaddr*)&serv_addr,
         sizeof(serv_addr)) < 0) {

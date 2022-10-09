@@ -12,15 +12,32 @@ char* namecopy;
 SOCKET socket_listen;
 int main(int argc, char* argv[]) {
 
-    if (strlen(argv[1]) > 20) {
+    if (argc < 3) {
+        fprintf(stderr, "Bad command format, try this: ./chatServer1 port \"roomname\"\n");
+        return 1;
+    }
+    if (argc > 3) {
+        fprintf(stderr, "Too many arguments. See Ya!\nDo this next time -> ./chatServer1 port \"roomname\"\n");
+        exit(0);
+    }
+
+    if (strlen(argv[2]) > 20) {
         printf("Cannot have more than 20 chars in Chatroom Name");
         return 1;
     }
 
-    int len;
-    len = strlen(argv[1]);
+
+    printf("\n**ATTENTION** If you entered an invalid port number, I just assign you a good one\n\n");
+
+
+    int len = strlen(argv[1]);
+    portcopy = malloc(len + 1);
+    strcpy(portcopy, argv[1]);
+
+    len = strlen(argv[2]);
     namecopy = malloc(len + 1);
-    strcpy(namecopy, argv[1]);
+    strcpy(namecopy, argv[2]);
+
 
     signal(SIGINT, handle_sigint);
 
@@ -32,8 +49,10 @@ int main(int argc, char* argv[]) {
 
     socket_listen = socket(AF_INET, SOCK_STREAM, 0);
 
+    short port;
+    sscanf(portcopy, "%hi", &port);
     my_addr.sin_family = AF_INET;
-    my_addr.sin_port = htons(SERV_TCP_PORT);     // short, network byte order
+    my_addr.sin_port = htons(port);     // short, network byte order
     my_addr.sin_addr.s_addr = inet_addr(SERV_HOST_ADDR);
     memset(my_addr.sin_zero, '\0', sizeof my_addr.sin_zero);
 
@@ -50,10 +69,12 @@ int main(int argc, char* argv[]) {
     if (getsockname(socket_listen, (struct sockaddr*)&sin, &lendle) == -1)
         perror("getsockname");
     else
-        printf("port number: %d\n", htons(sin.sin_port));
+        printf("port: %d\n", htons(sin.sin_port));
 
-    char text[10];
-    sprintf(text, "%d", htons(sin.sin_port));
+
+    char host[15];
+    inet_ntop(AF_INET, &(my_addr.sin_addr.s_addr), host, INET_ADDRSTRLEN);
+    printf("host: %s\n", host);
 
 
 

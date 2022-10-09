@@ -1,0 +1,7 @@
+
+**ATTENTION** If you entered an invalid port number, I just assign you a good one
+
+Listening...
+port: 1
+host: 10.130.49.212
+Waiting for connections...
