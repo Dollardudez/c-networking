@@ -35,4 +35,5 @@ directoryServer2:	directoryServer2.o
 # Clean up the mess we made
 #
 clean:
-	rm *.o chatServer2 chatServer1 chatClient2 chatClient1 directoryServer2 2>/dev/null
+	rm *.o \
+	chatServer2 chatServer1 chatCLient2 chatClient1 directoryServer2 inet 2>/dev/null
