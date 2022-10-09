@@ -41,7 +41,7 @@ int main(int argc, char* argv[]) {
 
     printf("Listening...\n");
     if (listen(socket_listen, 10) < 0) {
-        printf("listen() failed. (%d)\n");
+        printf("listen() failed.\n");
         return 1;
     }
 
