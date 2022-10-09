@@ -1,5 +1,6 @@
 
-#include "chap03.h"
+#include "structures.h"
+#include "inet.h"
 #include <stdlib.h>
 #include<signal.h>
 
@@ -15,16 +16,16 @@ SOCKET sockfd;
 int main(int argc, char* argv[]) {
 
     
-    int len = strlen(argv[2]);
+    int len = strlen(argv[1]);
     namecopy = malloc(len + 1);
-    strcpy(namecopy, argv[2]);
+    strcpy(namecopy, argv[1]);
 
-    if (argc < 3) {
-        fprintf(stderr, "usage: tcp_client hostname port\n");
+    if (argc < 1) {
+        fprintf(stderr, "./chatClient \"Username\"\n");
         return 1;
     }
-    if (argc > 3) {
-        fprintf(stderr, "Too many arguments. See Ya!\n");
+    if (argc > 2) {
+        fprintf(stderr, "Too many arguments. See Ya!\nDo this next time -> ./chatClient \"Username\"\n");
         exit(0);
     }
 
@@ -36,7 +37,7 @@ int main(int argc, char* argv[]) {
     struct sockaddr_in  serv_addr;
     memset((char*)&serv_addr, 0, sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;
-    serv_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    serv_addr.sin_addr.s_addr = inet_addr(SERV_HOST_ADDR);
     serv_addr.sin_port = htons(atoiport);
 
     printf("htons    %d\n", atoiport);
@@ -52,9 +53,7 @@ int main(int argc, char* argv[]) {
     }
 
     send(sockfd, namecopy, strlen(namecopy), 0);
-    printf("Connected.\n");
-    printf("To send data, enter text followed by enter.\n");
-
+    printf("Connected.\n\n");
     while (1) {
 
         fd_set reads;
@@ -81,10 +80,10 @@ int main(int argc, char* argv[]) {
             }
 
             printf("%s\n", read);
+           
 
         }
-
-
+        
         if (FD_ISSET(0, &reads)) {
             char write[1024];
             if (!fgets(write, 1024, stdin)) break;
@@ -136,7 +135,7 @@ void registerclient() {
     memset(&hints, 0, sizeof(hints));
     hints.ai_socktype = SOCK_STREAM;
     struct addrinfo* peer_address;
-    if (getaddrinfo("127.0.0.1", "8080", &hints, &peer_address)) {
+    if (getaddrinfo(SERV_HOST_ADDR, "8080", &hints, &peer_address)) {
         fprintf(stderr, "getaddrinfo() failed. (%d)\n", GETSOCKETERRNO());
         return;
     }

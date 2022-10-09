@@ -16,7 +16,7 @@ tcp:	server3 client3 hostent
 client2.o server2.o: inet.h
 client3.o server3.o: inet.h
 
-server2:	server2.o 
+server2:	server2.o
 	gcc $(CFLAGS) -o $@ server2.o $(LIBS)
 
 client2:	client2.o 

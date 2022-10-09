@@ -1,5 +1,6 @@
 
-#include "chap03.h"
+#include "structures.h"
+#include "inet.h"
 #include <ctype.h>
 #include <stdlib.h>
 

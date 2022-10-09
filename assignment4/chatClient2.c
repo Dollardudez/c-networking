@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include<signal.h>
 
+
 char* selection(int selection, char* text);
 void registerclient();
 void remove_spaces(char* s);
@@ -84,7 +85,7 @@ int main(int argc, char* argv[]) {
 
         }
 
-
+        print("Me: ")
         if (FD_ISSET(0, &reads)) {
             char write[1024];
             if (!fgets(write, 1024, stdin)) break;
@@ -94,6 +95,7 @@ int main(int argc, char* argv[]) {
             }
             send(sockfd, write, strlen(write), 0);
         }
+        print("\n")
     } //end while(1)
 
     printf("Closing socket...\n");

@@ -15,5 +15,5 @@
 #define MAX 100
 
 #define	SERV_UDP_PORT	9999
-#define SERV_TCP_PORT 17998
-#define	SERV_HOST_ADDR	"10.10.4.64" /* Change this to be your host addr: 129.130.10.43 for viper and 129.130.10.39 for cougar */
+#define SERV_TCP_PORT 1998
+#define	SERV_HOST_ADDR	"127.0.0.1" /* Change this to be your host addr: 129.130.10.43 for viper and 129.130.10.39 for cougar */
