@@ -25,7 +25,6 @@ struct chatroom
 extern struct chatter (*chatters)[];
 
 
-
 #define ISVALIDSOCKET(s) ((s) >= 0)
 #define CLOSESOCKET(s) close(s)
 #define SOCKET int
