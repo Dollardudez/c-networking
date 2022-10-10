@@ -8,6 +8,8 @@
 
 void registerwithdir(char port[], char name[], int cmd);
 void handle_sigint(int sig);
+int checkduplicatename(char* s, struct chatter* chatters[]);
+
 char* portcopy;
 char* namecopy;
 SOCKET socket_listen;
@@ -148,11 +150,11 @@ int main(int argc, char* argv[]) {
                     int removechatterindex = 100;
                     int remove = 0;
                     char removedname[21];
-                    if (strcmp("DEEEELEEETE", read) == 0) {
+                    if (strcmp("\032", read) == 0) {
                         printf("user has left the chat...\n");
                         remove = 1;
 
-                        for (int a = 0; a < 5; a++) {
+                        for (int a = 0; a < MAX_CHATTERS; a++) {
                             if (chatters[a] != NULL) {
                                 if (chatters[a]->socket == i) {
                                     removechatterindex = a;
@@ -162,9 +164,9 @@ int main(int argc, char* argv[]) {
                         }
                     }
                     if (remove == 1) {
-                        struct chatter* newchatters[5] = { NULL };
+                        struct chatter* newchatters[MAX_CHATTERS] = { NULL };
 
-                        for (int j = 0; j < 5; j++) {
+                        for (int j = 0; j < MAX_CHATTERS; j++) {
                             if (j != removechatterindex) {
                                 if (chatters[j] != NULL) {
                                     newchatters[j] = chatters[j];
@@ -177,12 +179,18 @@ int main(int argc, char* argv[]) {
                     }
                     memset(full_message, 0, strlen(full_message));
                     memset(sendername, 0, strlen(sendername));
-                    for (int k = 0; k < 5; k++) {
+                    for (int k = 0; k < MAX_CHATTERS; k++) {
                         if (chatters[k] == NULL) {
                             continue;
                         }
                         if (chatters[k]->socket == i) {
                             if (chatters[k]->first_send == 0) {
+                                if (checkduplicatename(read, chatters)==0){
+                                    char hmm[] = "Someone in the chatroom already has that name. See Ya!";
+                                    send(chatters[k]->socket, hmm, strlen(hmm), 0);
+                                    chatters[k] = NULL;
+                                    break;
+                                }
                                 strncpy(chatters[k]->name, read, sizeof(chatters[k]->name));
 
 
@@ -196,7 +204,7 @@ int main(int argc, char* argv[]) {
                             strncpy(sendername, chatters[k]->name, sizeof(sendername));
                         }
                     }
-                    for (int k = 0; k < 5; k++) {
+                    for (int k = 0; k < MAX_CHATTERS; k++) {
                         strcat(full_message, sendername);
                         if (chatters[k] == NULL) {
                             memset(full_message, 0, strlen(full_message));
@@ -301,7 +309,7 @@ void registerwithdir(char port[], char name[], int cmd) {
     }
     freeaddrinfo(peer_address);
     char strData[255];
-    strncpy(strData, name, sizeof(strData));
+    strncpy(strData, name, sizeof(strData) + 1);
     strcat(strData, " ");
     strcat(strData, port);
     strcat(strData, " ");
@@ -309,7 +317,7 @@ void registerwithdir(char port[], char name[], int cmd) {
     sprintf(str, "%d", cmd);
     strcat(strData, str);
     printf("%s", strData);
-    send(socket_peer, strData, sizeof(strData), 0);
+    send(socket_peer, strData, sizeof(strData) + 1, 0);
 
     while (1) {
 
@@ -340,8 +348,8 @@ void registerwithdir(char port[], char name[], int cmd) {
             for (i = 0; read[i] != '\0'; ++i);
 
             printf("\n   %s\n", read);
-            if (strcmp(read, "Chatroom name already exists") == 0) {
-                printf("   | That chat name is already registered. Goodbye. |\n");
+            if (strcmp(read, "Chatroom name already exists") == 0 || strcmp(read,"A max of 3 active chatrooms has been reached.") == 0) {
+                printf("!!!!!!!!!!!!Goodbye. |\n");
                 exit(0);
             }
             fflush(stdout);
@@ -367,4 +375,16 @@ void handle_sigint(int sig)
     printf("Finished.\n");
 
     exit(0);
+}
+
+int checkduplicatename(char* s, struct chatter* chatters[]) {
+    for (int i = 0; i < MAX_CHATTERS; i++) {
+        if (chatters[i] != NULL) {
+            if (strcmp(chatters[i]->name, s) == 0) {
+                return 0;
+
+            }
+        }
+    }
+    return 1;
 }

@@ -6,85 +6,27 @@
 #include<signal.h>
 #include<pthread.h>
 
+char** parse_cmd_args(int argc, char *argv[], char ** port_and_name);
 void handle_sigint(int sig);
-char* portcopy;
-char* namecopy;
-SOCKET socket_listen;
+void setup_server(char ** port_and_room);
+void connect_new_chatter(struct chatter* chatters[], int socket_client);
+int checkduplicatename(char* s, struct chatter* chatters[]);
+
+int socket_listen;
 int main(int argc, char* argv[]) {
-
-    if (argc < 3) {
-        fprintf(stderr, "Bad command format, try this: ./chatServer1 port \"roomname\"\n");
-        return 1;
-    }
-    if (argc > 3) {
-        fprintf(stderr, "Too many arguments. See Ya!\nDo this next time -> ./chatServer1 port \"roomname\"\n");
-        exit(0);
-    }
-
-    if (strlen(argv[2]) > 20) {
-        printf("Cannot have more than 20 chars in Chatroom Name");
-        return 1;
-    }
-
-
-    printf("\n**ATTENTION** If you entered an invalid port number, I just assign you a good one\n\n");
-
-
-    int len = strlen(argv[1]);
-    portcopy = malloc(len + 1);
-    strcpy(portcopy, argv[1]);
-
-    len = strlen(argv[2]);
-    namecopy = malloc(len + 1);
-    strcpy(namecopy, argv[2]);
-
-
+    int first_chatter = 0;
+    struct chatter* chatters[MAX_CHATTERS] = { NULL };
+    char **port_and_room = malloc (sizeof (char *) * 3);
+    parse_cmd_args(argc, argv, port_and_room);
     signal(SIGINT, handle_sigint);
 
-    struct chatter* chatters[5] = { NULL };
-
-
-    int socket_listen;
-    struct sockaddr_in my_addr;
-
-    socket_listen = socket(AF_INET, SOCK_STREAM, 0);
-
-    short port;
-    sscanf(portcopy, "%hi", &port);
-    my_addr.sin_family = AF_INET;
-    my_addr.sin_port = htons(port);     // short, network byte order
-    my_addr.sin_addr.s_addr = inet_addr(SERV_HOST_ADDR);
-    memset(my_addr.sin_zero, '\0', sizeof my_addr.sin_zero);
-
-    bind(socket_listen, (struct sockaddr*)&my_addr, sizeof my_addr);
-
-    printf("Listening...\n");
-    if (listen(socket_listen, 10) < 0) {
-        printf("listen() failed.\n");
-        return 1;
-    }
-
-    struct sockaddr_in sin;
-    socklen_t lendle = sizeof(sin);
-    if (getsockname(socket_listen, (struct sockaddr*)&sin, &lendle) == -1)
-        perror("getsockname");
-    else
-        printf("port: %d\n", htons(sin.sin_port));
-
-
-    char host[15];
-    inet_ntop(AF_INET, &(my_addr.sin_addr.s_addr), host, INET_ADDRSTRLEN);
-    printf("host: %s\n", host);
-
-
+    setup_server(port_and_room);
 
     fd_set master;
     FD_ZERO(&master);
     FD_SET(socket_listen, &master);
     SOCKET max_socket = socket_listen;
-
     printf("Waiting for connections...\n");
-
 
     while (1) {
         fd_set reads;
@@ -120,19 +62,11 @@ int main(int argc, char* argv[]) {
                         address_buffer, sizeof(address_buffer), 0, 0,
                         NI_NUMERICHOST);
 
-                    for (int a = 0; a < 5; a++) {
-                        printf("%d\n", a);
-                        if (chatters[a] == NULL) {
-                            chatters[a] = (struct chatter*)malloc(sizeof(struct chatter));
-                            chatters[a]->first_send = 0;
-                            chatters[a]->socket = socket_client;
-                            printf("New connection from %d\n", chatters[a]->socket);
-                            break;
-                        }
-                    }
+                    connect_new_chatter(chatters, socket_client);
+
                     
                 }
-                ////////////////////////////////////////////////////////////////////////////////////////////////////
+                
                 else {
                     int check = 0;
                     char full_message[1024] = { '\0' };
@@ -147,23 +81,24 @@ int main(int argc, char* argv[]) {
                     int removechatterindex = 100;
                     int remove = 0;
                     char removedname[21];
-                    if (strcmp("DEEEELEEETE", read) == 0) {
-                        printf("user has left the chat...\n");
+                    if (strcmp("\032", read) == 0) {
                         remove = 1;
 
-                        for (int a = 0; a < 5; a++) {
+                        for (int a = 0; a < MAX_CHATTERS; a++) {
                             if (chatters[a] != NULL) {
                                 if (chatters[a]->socket == i) {
                                     removechatterindex = a;
                                     strncpy(removedname, chatters[a]->name, sizeof(removedname));
+                                    printf("%s has left the chat...\n", removedname);
+
                                 }
                             }
                         }
                     }
                     if (remove == 1) {
-                        struct chatter* newchatters[5] = { NULL };
+                        struct chatter* newchatters[MAX_CHATTERS] = { NULL };
 
-                        for (int j = 0; j < 5; j++) {
+                        for (int j = 0; j < MAX_CHATTERS; j++) {
                             if (j != removechatterindex) {
                                 if (chatters[j] != NULL) {
                                     newchatters[j] = chatters[j];
@@ -174,14 +109,19 @@ int main(int argc, char* argv[]) {
                         memcpy(chatters, newchatters, sizeof(newchatters));
                         check = 3;
                     }
-                    memset(full_message, 0, strlen(full_message));
-                    memset(sendername, 0, strlen(sendername));
-                    for (int k = 0; k < 5; k++) {
+
+                    for (int k = 0; k < MAX_CHATTERS; k++) {
                         if (chatters[k] == NULL) {
                             continue;
                         }
                         if (chatters[k]->socket == i) {
                             if (chatters[k]->first_send == 0) {
+                                if (checkduplicatename(read, chatters)==0){
+                                    char hmm[] = "Someone in the chatroom already has that name. See Ya!";
+                                    send(chatters[k]->socket, hmm, strlen(hmm), 0);
+                                    chatters[k] = NULL;
+                                    break;
+                                }
                                 strncpy(chatters[k]->name, read, sizeof(chatters[k]->name));
 
 
@@ -195,7 +135,7 @@ int main(int argc, char* argv[]) {
                             strncpy(sendername, chatters[k]->name, sizeof(sendername));
                         }
                     }
-                    for (int k = 0; k < 5; k++) {
+                    for (int k = 0; k < MAX_CHATTERS; k++) {
                         strcat(full_message, sendername);
                         if (chatters[k] == NULL) {
                             memset(full_message, 0, strlen(full_message));
@@ -204,11 +144,17 @@ int main(int argc, char* argv[]) {
                         if (check == 1) {
                             if (chatters[k]->socket == i) {
                                 char hmm[100];
-                                sprintf(hmm, "** Welcome to [%s], ", namecopy);
+                                sprintf(hmm, "** Welcome to [%s], ", port_and_room[1]);
                                 strcat(hmm, chatters[k]->name);
                                 strcat(hmm, " **\n");
                                 send(chatters[k]->socket, hmm, strlen(hmm), 0);
                                 memset(hmm, 0, strlen(hmm));
+                                if(first_chatter == 0){
+                                    first_chatter++;
+                                    strcat(hmm, "You are the first person in this room!\n");
+                                    send(chatters[k]->socket, hmm, strlen(hmm), 0);
+                                    memset(hmm, 0, strlen(hmm));
+                                }
                                 memset(full_message, 0, strlen(full_message));
 
                             }
@@ -261,6 +207,8 @@ int main(int argc, char* argv[]) {
 }
 
 
+//////////////////////////////////HELPERS///////////////////////////////////////////////////////////////////
+
 void handle_sigint(int sig)
 {
     printf("Caught signal %d\n", sig);
@@ -269,4 +217,106 @@ void handle_sigint(int sig)
     printf("Finished.\n");
 
     exit(0);
+}
+
+
+char** parse_cmd_args(int argc, char *argv[], char ** port_and_room){
+    char *portcopy;
+    char *namecopy;
+    if (argc < 3) {
+        fprintf(stderr, "Bad command format, try this: ./chatServer1 port \"roomname\"\n");
+        exit(1);
+    }
+    if (argc > 3) {
+        fprintf(stderr, "Too many arguments. See Ya!\nDo this next time -> ./chatServer1 port \"roomname\"\n");
+        exit(0);
+    }
+
+    if (strlen(argv[2]) > 20) {
+        printf("Cannot have more than 20 chars in Chatroom Name");
+        exit(1);
+    }
+    printf("\n**ATTENTION** If you entered an invalid port number, I just assign you a good one\n\n");
+
+    int len = strlen(argv[1]);
+    portcopy = malloc(len + 1);
+    strcpy(portcopy, argv[1]);
+
+    len = strlen(argv[2]);
+    namecopy = malloc(len + 1);
+    strcpy(namecopy, argv[2]);
+
+    strncpy (port_and_room[0], portcopy, strlen(portcopy)+1);
+    strncpy (port_and_room[1], namecopy, strlen(namecopy)+1);
+}
+
+
+void setup_server(char ** port_and_room){
+    struct sockaddr_in my_addr;
+
+    socket_listen = socket(AF_INET, SOCK_STREAM, 0);
+
+    short port;
+    sscanf(port_and_room[0], "%hi", &port);
+    my_addr.sin_family = AF_INET;
+    my_addr.sin_port = htons(port);     // short, network byte order
+    my_addr.sin_addr.s_addr = inet_addr(SERV_HOST_ADDR);
+    memset(my_addr.sin_zero, '\0', sizeof my_addr.sin_zero);
+
+    bind(socket_listen, (struct sockaddr*)&my_addr, sizeof my_addr);
+
+    printf("Listening...\n");
+    if (listen(socket_listen, 10) < 0) {
+        printf("listen() failed.\n");
+        exit(1);
+    }
+
+    struct sockaddr_in sin;
+    socklen_t lendle = sizeof(sin);
+    if (getsockname(socket_listen, (struct sockaddr*)&sin, &lendle) == -1)
+        perror("getsockname");
+    else
+        printf("port: %d\n", htons(sin.sin_port));
+
+
+    char host[15];
+    inet_ntop(AF_INET, &(my_addr.sin_addr.s_addr), host, INET_ADDRSTRLEN);
+    printf("host: %s\n", host);
+}
+
+void connect_new_chatter(struct chatter* chatters[], int socket_client){
+    int flag=0;
+    for (int a = 0; a <= MAX_CHATTERS; a++) {
+        if (chatters[a] == NULL) {
+            flag=1;
+            printf("%d\n", a);
+            chatters[a] = (struct chatter*)malloc(sizeof(struct chatter));
+            chatters[a]->first_send = 0;
+            chatters[a]->socket = socket_client;
+            printf("New connection from %d\n", chatters[a]->socket);
+            return;
+        }
+        else{
+            printf("%d\n", a);
+            printf("%s\n", chatters[a]->name);
+        }
+
+    }
+    if (flag ==0){
+        char hmm[] = "Sorry max chatters have been reached. See Ya!";
+        send(socket_client, hmm, strlen(hmm), 0);
+        return;
+    }
+}
+
+int checkduplicatename(char* s, struct chatter* chatters[]) {
+    for (int i = 0; i < MAX_CHATTERS; i++) {
+        if (chatters[i] != NULL) {
+            if (strcmp(chatters[i]->name, s) == 0) {
+                return 0;
+
+            }
+        }
+    }
+    return 1;
 }

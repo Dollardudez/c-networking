@@ -13,7 +13,7 @@ int checkduplicatename(char* s, struct chatroom** rooms);
 
 int main(int argc, char* argv[]) {
 
-    struct chatroom* chatrooms[5] = { NULL };
+    struct chatroom* chatrooms[MAX_CHATROOMS] = { NULL };
 
 
 
@@ -25,7 +25,7 @@ int main(int argc, char* argv[]) {
     hints.ai_flags = AI_PASSIVE;
 
     struct addrinfo* bind_address;
-    getaddrinfo(0, "8080", &hints, &bind_address);
+    getaddrinfo(0, SERV_TCP_PORT, &hints, &bind_address);
 
 
     printf("Creating socket...\n");
@@ -118,14 +118,12 @@ int main(int argc, char* argv[]) {
                         result = registerchatroom(read, chatrooms);
                     }
                     if (result == 0) {
-                        struct chatroom* newchatrooms[5] = { NULL };
+                        struct chatroom* newchatrooms[MAX_CHATROOMS] = { NULL };
 
-                        for (int i = 0; i < 5; i++) {
+                        for (int i = 0; i < MAX_CHATROOMS; i++) {
                             if (chatrooms[i] != NULL) {
                                 if (chatrooms[i]->active != 0) {
-                                    
                                  newchatrooms[i] = chatrooms[i];
-
                                 }
                             }                        
                         }
@@ -135,6 +133,31 @@ int main(int argc, char* argv[]) {
 
                     if (result == 2) {
                         send(i, "Chatroom name already exists", 29, 0);
+                    }
+                    if (result == 3) {
+                        send(i, "A max of 3 active chatrooms has been reached.", 50, 0);
+                        struct chatroom* newchatrooms[MAX_CHATROOMS] = { NULL };
+
+                        for (int i = 0; i < MAX_CHATROOMS; i++) {
+                            if (chatrooms[i] != NULL) {
+                                if (chatrooms[i]->active != 0) {
+                                newchatrooms[i] = chatrooms[i];
+                                }
+                            }                        
+                        }
+                        memcpy(chatrooms, newchatrooms, sizeof(newchatrooms));
+                    }
+                    if (result == 4) {
+                        struct chatroom* newchatrooms[MAX_CHATROOMS] = { NULL };
+
+                        for (int i = 0; i < MAX_CHATROOMS; i++) {
+                            if (chatrooms[i] != NULL) {
+                                if (chatrooms[i]->active != 0) {
+                                newchatrooms[i] = chatrooms[i];
+                                }
+                            }                        
+                        }
+                        memcpy(chatrooms, newchatrooms, sizeof(newchatrooms));
                     }
                 }
 
@@ -155,7 +178,7 @@ int main(int argc, char* argv[]) {
 char* getServerText(struct chatroom* rooms[]) {
     char* roominf = malloc(1024);
     strncpy(roominf, "List of active chatrooms\n\n", 27);
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < MAX_CHATROOMS; i++) {
         if (rooms[i] == NULL) continue;
         else{
             char buffer[100];
@@ -176,46 +199,48 @@ int registerchatroom(char * s, struct chatroom** rooms){
     while (token != NULL)
     {
         i++;
-        printf("%s\n", token);
+        printf("token %d %s\n",i, token);
         if (i == 1) {
             //tokens[0] = malloc(strlen(token));
-            strncpy(tokens[0], token, strlen(token));
+            strncpy(tokens[0], token, strlen(token)+8);
         }
         if (i == 2) {
             //tokens[1] = malloc(strlen(token));
-            strncpy(tokens[1], token, strlen(token));
+            strncpy(tokens[1], token, strlen(token)+8);
         }
         if (i == 3) {
             //tokens[2] = malloc(strlen(token));
-            strncpy(tokens[2], token, strlen(token));
+            strncpy(tokens[2], token, strlen(token)+8);
+            if(strcmp(token, "0") == 0){
+
+                for (int i = 0; i < MAX_CHATROOMS; i++) {
+                    if(rooms[i] != NULL){
+                        if (strcmp(rooms[i]->name, tokens[0]) == 0) {
+
+                            rooms[i]->active = 0;
+                        }   
+                    }                     
+                }
+                return 4;
+            }
         }
         token = strtok(NULL, " ");
     }
-    
-    if (strcmp(tokens[2], "0") == 0) {
-        for (int a = 0; a < 5; a++) {
-            if (strcmp(rooms[a]->name, tokens[0]) == 0) {
-                char* ptr;
-                rooms[a]->active = strtol(tokens[2], &ptr, 10);
-                break;
-            }
-        }
-        return 0;
-    }
-    else {
-        if (checkduplicatename(tokens[0], rooms) == 0) return 2;
-        for (int a = 0; a < 5; a++) {
-            if (rooms[a] == NULL) {
-                rooms[a] = (struct chatroom*)malloc(sizeof(struct chatroom));
-                strncpy(rooms[a]->name, tokens[0], sizeof(rooms[a]->name));
-                char* ptr;
-                rooms[a]->socket = strtol(tokens[1], &ptr, 10);
-                char* otherptr;
-                rooms[a]->active = strtol(tokens[2], &otherptr, 10);
-                break;
-            }
+    int flag = 0;
+    if (checkduplicatename(tokens[0], rooms) == 0) return 2;
+    for (int a = 0; a < MAX_CHATROOMS; a++) {
+        if (rooms[a] == NULL) {
+            flag = 1;
+            rooms[a] = (struct chatroom*)malloc(sizeof(struct chatroom));
+            strncpy(rooms[a]->name, tokens[0], sizeof(rooms[a]->name));
+            char* ptr;
+            rooms[a]->socket = strtol(tokens[1], &ptr, 10);
+            char* otherptr;
+            rooms[a]->active = strtol(tokens[2], &otherptr, 10);
+            break;
         }
     }
+    if(flag ==0) return 3;
     return 1;
 }
 
@@ -232,11 +257,10 @@ int checkforchatroom(char s[]) {
 }
 
 int checkduplicatename(char* s, struct chatroom** rooms) {
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < MAX_CHATROOMS; i++) {
         if (rooms[i] != NULL) {
             if (strcmp(rooms[i]->name, s) == 0) {
                 return 0;
-
             }
         }
     }

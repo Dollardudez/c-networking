@@ -10,21 +10,23 @@
 
 struct chatter
 {
-    char name[30];
+    char name[21];
     int socket;
     int first_send;
 };
 
 struct chatroom
 {
-    char name[30];
+    char name[21];
     int socket;
     int active;
 };
 
 extern struct chatter (*chatters)[];
 
-
+#define MAX_CHATROOMS 3
+#define MAX_CHATTERS 3
+#define MAX_ROOMS 3
 #define ISVALIDSOCKET(s) ((s) >= 0)
 #define CLOSESOCKET(s) close(s)
 #define SOCKET int
