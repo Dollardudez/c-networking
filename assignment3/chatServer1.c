@@ -241,7 +241,7 @@ char** parse_cmd_args(int argc, char *argv[], char **port_and_room){
     portcopy = malloc(strlen(argv[1]) + 1);
     strcpy(portcopy, argv[1]);
 
-    namecopy = malloc(argv[2] + 1);
+    namecopy = malloc(strlen(argv[1]) + 1);
     strcpy(namecopy, argv[2]);
 
     strncpy (port_and_room[0], portcopy, strlen(portcopy)+1);
