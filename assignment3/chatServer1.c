@@ -221,8 +221,8 @@ void handle_sigint(int sig)
 
 
 char** parse_cmd_args(int argc, char *argv[], char **port_and_room){
-    char *portcopy;
-    char *namecopy;
+    char portcopy[50] = { '\0' };
+    char *namecopy[50] = { '\0' };
     if (argc < 3) {
         fprintf(stderr, "Bad command format, try this: ./chatServer1 port \"roomname\"\n");
         exit(1);
@@ -238,14 +238,9 @@ char** parse_cmd_args(int argc, char *argv[], char **port_and_room){
     }
     printf("\n**ATTENTION** If you entered an invalid port number, I just assign you a good one\n\n");
 
-    portcopy = malloc(sizeof(char)*100);
-    strcpy(portcopy, argv[1]);
 
-    namecopy = malloc(sizeof(char)*100);
-    strcpy(namecopy, argv[2]);
-
-    strcpy (port_and_room[0], portcopy);
-    strcpy (port_and_room[1], namecopy);
+    strcpy (port_and_room[0], argv[1]);
+    strcpy (port_and_room[1], argv[2]);
     printf("done");
 }
 
