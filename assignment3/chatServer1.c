@@ -16,7 +16,7 @@ int socket_listen;
 int main(int argc, char* argv[]) {
     int first_chatter = 0;
     struct chatter* chatters[MAX_CHATTERS];
-    char **port_and_room = malloc (sizeof (char *) * 3);
+    char **port_and_room = malloc (3*sizeof (char *));
     parse_cmd_args(argc, argv, port_and_room);
     signal(SIGINT, handle_sigint);
 
@@ -220,7 +220,7 @@ void handle_sigint(int sig)
 }
 
 
-char** parse_cmd_args(int argc, char *argv[], char ** port_and_room){
+char** parse_cmd_args(int argc, char *argv[], char **port_and_room){
     char *portcopy;
     char *namecopy;
     if (argc < 3) {
@@ -238,12 +238,10 @@ char** parse_cmd_args(int argc, char *argv[], char ** port_and_room){
     }
     printf("\n**ATTENTION** If you entered an invalid port number, I just assign you a good one\n\n");
 
-    int len = strlen(argv[1]);
-    portcopy = malloc(len + 1);
+    portcopy = malloc(strlen(argv[1]) + 1);
     strcpy(portcopy, argv[1]);
 
-    len = strlen(argv[2]);
-    namecopy = malloc(len + 1);
+    namecopy = malloc(argv[2] + 1);
     strcpy(namecopy, argv[2]);
 
     strncpy (port_and_room[0], portcopy, strlen(portcopy)+1);
