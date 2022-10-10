@@ -36,4 +36,4 @@ directoryServer2:	directoryServer2.o
 #
 clean:
 	rm *.o \
-	chatServer2 chatServer1 chatCLient2 chatClient1 directoryServer2 inet 2>/dev/null
+	chatServer2 chatServer1 chatClient2 chatClient1 directoryServer2 inet 2>/dev/null

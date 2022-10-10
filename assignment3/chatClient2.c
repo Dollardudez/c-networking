@@ -162,7 +162,10 @@ void registerclient() {
     memset(&hints, 0, sizeof(hints));
     hints.ai_socktype = SOCK_STREAM;
     struct addrinfo* peer_address;
-    if (getaddrinfo(SERV_HOST_ADDR, "8080", &hints, &peer_address)) {
+
+    char myport[30];
+    sprintf(myport, "%d", SERV_TCP_PORT); 
+    if (getaddrinfo(SERV_HOST_ADDR, myport, &hints, &peer_address)) {
         fprintf(stderr, "getaddrinfo() failed. (%d)\n", GETSOCKETERRNO());
         return;
     }

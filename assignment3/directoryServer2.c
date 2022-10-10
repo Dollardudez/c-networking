@@ -25,7 +25,9 @@ int main(int argc, char* argv[]) {
     hints.ai_flags = AI_PASSIVE;
 
     struct addrinfo* bind_address;
-    getaddrinfo(0, SERV_TCP_PORT, &hints, &bind_address);
+    char myport[30];
+    sprintf(myport, "%d", SERV_TCP_PORT); 
+    getaddrinfo(SERV_HOST_ADDR, myport, &hints, &bind_address);
 
 
     printf("Creating socket...\n");
