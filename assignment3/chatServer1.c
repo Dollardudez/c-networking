@@ -238,10 +238,10 @@ char** parse_cmd_args(int argc, char *argv[], char **port_and_room){
     }
     printf("\n**ATTENTION** If you entered an invalid port number, I just assign you a good one\n\n");
 
-    portcopy = malloc(strlen(argv[1]) + 1);
+    portcopy = malloc(sizeof(char)*100);
     strcpy(portcopy, argv[1]);
 
-    namecopy = malloc(strlen(argv[1]) + 1);
+    namecopy = malloc(sizeof(char)*100);
     strcpy(namecopy, argv[2]);
 
     strcpy (port_and_room[0], portcopy);
