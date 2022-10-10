@@ -242,8 +242,8 @@ char** parse_cmd_args(int argc, char *argv[], char **port_and_room){
 
     strcpy(namecopy, argv[2]);
 
-    strncpy (port_and_room[0], portcopy, strlen(portcopy));
-    strncpy (port_and_room[1], namecopy, strlen(namecopy));
+    strncpy (port_and_room[0], portcopy);
+    strncpy (port_and_room[1], namecopy);
     printf("done");
 }
 
