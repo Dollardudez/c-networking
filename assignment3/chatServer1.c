@@ -239,8 +239,8 @@ char** parse_cmd_args(int argc, char *argv[], char **port_and_room){
     printf("\n**ATTENTION** If you entered an invalid port number, I just assign you a good one\n\n");
 
 
-    strcpy (port_and_room[0], argv[1]);
-    strcpy (port_and_room[1], argv[2]);
+    memcpy(port_and_room[0], argv[1], strlen(argv[1])+1);
+    memcpy(port_and_room[1], argv[2], strlen(argv[1])+1);
     printf("done");
 }
 
