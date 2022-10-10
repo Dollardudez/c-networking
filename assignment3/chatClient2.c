@@ -33,7 +33,7 @@ int main(int argc, char* argv[]) {
         struct timeval timeout;
         fd_set reads = setup_select(timeout);
         if (select(sockfd + 1, &reads, 0, 0, &timeout) < 0) {
-            fprintf(stderr, "select() failed. (%d)\n", GETSOCKETERRNO());
+            fprintf(stderr, "select() failed\n");
             return 1;
         }
         if (FD_ISSET(sockfd, &reads)) {
@@ -166,7 +166,7 @@ void registerclient() {
     char myport[30];
     sprintf(myport, "%d", SERV_TCP_PORT); 
     if (getaddrinfo(SERV_HOST_ADDR, myport, &hints, &peer_address)) {
-        fprintf(stderr, "getaddrinfo() failed. (%d)\n", GETSOCKETERRNO());
+        fprintf(stderr, "getaddrinfo() failed.\n");
         return;
     }
 
@@ -185,7 +185,7 @@ void registerclient() {
     socket_peer = socket(peer_address->ai_family,
         peer_address->ai_socktype, peer_address->ai_protocol);
     if (!ISVALIDSOCKET(socket_peer)) {
-        fprintf(stderr, "socket() failed. (%d)\n", GETSOCKETERRNO());
+        fprintf(stderr, "socket() failed.\n");
         return;
     }
 
@@ -193,7 +193,7 @@ void registerclient() {
     printf("Connecting...\n");
     if (connect(socket_peer,
         peer_address->ai_addr, peer_address->ai_addrlen)) {
-        fprintf(stderr, "connect() failed. (%d)\n", GETSOCKETERRNO());
+        fprintf(stderr, "connect() failed.\n");
         return;
     }
     freeaddrinfo(peer_address);
@@ -215,7 +215,7 @@ void registerclient() {
         timeout.tv_usec = 100000;
 
         if (select(socket_peer + 1, &reads, 0, 0, &timeout) < 0) {
-            fprintf(stderr, "select() failed. (%d)\n", GETSOCKETERRNO());
+            fprintf(stderr, "select() failed.n");
             return;
         }
 

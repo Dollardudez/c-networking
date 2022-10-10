@@ -93,7 +93,7 @@ int main(int argc, char* argv[]) {
         fd_set reads;
         reads = master;
         if (select(max_socket + 1, &reads, 0, 0, 0) < 0) {
-            fprintf(stderr, "select() failed. (%d)\n", GETSOCKETERRNO());
+            fprintf(stderr, "select() failed.\n");
             return 1;
         }
 
@@ -108,8 +108,7 @@ int main(int argc, char* argv[]) {
                         (struct sockaddr*)&client_address,
                         &client_len);
                     if (!ISVALIDSOCKET(socket_client)) {
-                        fprintf(stderr, "accept() failed. (%d)\n",
-                            GETSOCKETERRNO());
+                        fprintf(stderr, "accept() failed.\n");
                         return 1;
                     }
 
@@ -279,7 +278,7 @@ void registerwithdir(char port[], char name[], int cmd) {
     char myport[30];
 
     if (getaddrinfo(SERV_HOST_ADDR, myport, &hints, &peer_address)) {
-        fprintf(stderr, "getaddrinfo() failed. (%d)\n", GETSOCKETERRNO());
+        fprintf(stderr, "getaddrinfo() failed.\n");
         return;
     }
     int netport = htons(atoi(port));
@@ -298,7 +297,7 @@ void registerwithdir(char port[], char name[], int cmd) {
     socket_peer = socket(peer_address->ai_family,
         peer_address->ai_socktype, peer_address->ai_protocol);
     if (!ISVALIDSOCKET(socket_peer)) {
-        fprintf(stderr, "socket() failed. (%d)\n", GETSOCKETERRNO());
+        fprintf(stderr, "socket() failed.\n");
         return;
     }
 
@@ -306,7 +305,7 @@ void registerwithdir(char port[], char name[], int cmd) {
     printf("Connecting...\n");
     if (connect(socket_peer,
         peer_address->ai_addr, peer_address->ai_addrlen)) {
-        fprintf(stderr, "connect() failed. (%d)\n", GETSOCKETERRNO());
+        fprintf(stderr, "connect() failed.\n");
         return;
     }
     freeaddrinfo(peer_address);
@@ -335,7 +334,7 @@ void registerwithdir(char port[], char name[], int cmd) {
         timeout.tv_usec = 100000;
 
         if (select(socket_peer + 1, &reads, 0, 0, &timeout) < 0) {
-            fprintf(stderr, "select() failed. (%d)\n", GETSOCKETERRNO());
+            fprintf(stderr, "select() failed.\n");
             return;
         }
 

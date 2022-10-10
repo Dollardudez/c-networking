@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
         fd_set reads;
         reads = master;
         if (select(max_socket + 1, &reads, 0, 0, 0) < 0) {
-            fprintf(stderr, "select() failed. (%d)\n", GETSOCKETERRNO());
+            fprintf(stderr, "select() failed.");
             return 1;
         }
 
@@ -47,8 +47,7 @@ int main(int argc, char* argv[]) {
                         (struct sockaddr*)&client_address,
                         &client_len);
                     if (!ISVALIDSOCKET(socket_client)) {
-                        fprintf(stderr, "accept() failed. (%d)\n",
-                            GETSOCKETERRNO());
+                        fprintf(stderr, "accept() failed");
                         return 1;
                     }
 

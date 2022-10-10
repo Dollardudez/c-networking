@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
         struct timeval timeout;
         fd_set reads = setup_select(timeout);
         if (select(sockfd + 1, &reads, 0, 0, &timeout) < 0) {
-            fprintf(stderr, "select() failed. (%d)\n", GETSOCKETERRNO());
+            fprintf(stderr, "select() failed.\n");
             return 1;
         }
         if (FD_ISSET(sockfd, &reads)) {
