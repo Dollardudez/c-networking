@@ -6,7 +6,7 @@
 #include<signal.h>
 #include<pthread.h>
 
-void parse_cmd_args(int argc, char *argv[], char ** port_and_name);
+void parse_cmd_args(int argc, char **argv, char ** port_and_name);
 void handle_sigint(int sig);
 void setup_server(char ** port_and_room);
 void connect_new_chatter(struct chatter* chatters[], int socket_client);
@@ -220,7 +220,7 @@ void handle_sigint(int sig)
 }
 
 
-void parse_cmd_args(int argc, char *argv[], char **port_and_room){
+void parse_cmd_args(int argc, char **argv, char **port_and_room){
     char portcopy[50] = { '\0' };
     char *namecopy[50] = { '\0' };
     if (argc < 3) {
@@ -233,14 +233,15 @@ void parse_cmd_args(int argc, char *argv[], char **port_and_room){
     }
 
     if (strlen(argv[2]) > 20) {
-        printf("Cannot have more than 20 chars in Chatroom Name");
+        printf("Cannot have more than 20 chars in Chatroom Name\n");
         exit(1);
     }
+    printf("%s", port_and_room[0]);
     printf("\n**ATTENTION** If you entered an invalid port number, I just assign you a good one\n\n");
 
 
     memcpy(port_and_room[0], argv[1], strlen(argv[1])+1);
-    memcpy(port_and_room[1], argv[2], strlen(argv[1])+1);
+    memcpy(port_and_room[1], argv[2], strlen(argv[2])+1);
     printf("done");
 }
 
