@@ -2,7 +2,7 @@
 # Makefile for Example
 #
 LIBS	= 
-CFLAGS	= -g -ggdb
+CFLAGS	= -g -ggdb -std=gnu17
 
 all:	dir nodir 
 

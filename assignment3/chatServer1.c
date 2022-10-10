@@ -235,8 +235,6 @@ void parse_cmd_args(int argc, char **argv, char **port_and_room){
         printf("Cannot have more than 20 chars in Chatroom Name\n");
         exit(1);
     }
-    printf("%s", argv[1]);
-    printf("%s", argv[2]);
     printf("\n**ATTENTION** If you entered an invalid port number, I just assign you a good one\n\n");
 
 
