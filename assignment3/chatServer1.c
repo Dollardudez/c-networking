@@ -15,7 +15,7 @@ int checkduplicatename(char* s, struct chatter* chatters[]);
 int socket_listen;
 int main(int argc, char* argv[]) {
     int first_chatter = 0;
-    struct chatter* chatters[MAX_CHATTERS] = { NULL };
+    struct chatter* chatters[MAX_CHATTERS];
     char **port_and_room = malloc (sizeof (char *) * 3);
     parse_cmd_args(argc, argv, port_and_room);
     signal(SIGINT, handle_sigint);
