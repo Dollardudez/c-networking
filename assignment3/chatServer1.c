@@ -83,8 +83,9 @@ int main(int argc, char* argv[]) {
                         address_buffer, sizeof(address_buffer), 0, 0,
                         NI_NUMERICHOST);
 
-                    for (int a = 0; a < 5; a++) {
-                        int flag=0;
+                    int flag=0;
+
+                    for (int a = 0; a < MAX_CHATTERS; a++) {
                         printf("%d\n", a);
                         if (chatters[a] == NULL) {
                             flag = 1;
@@ -94,13 +95,12 @@ int main(int argc, char* argv[]) {
                             printf("New connection from %d\n", chatters[a]->socket);
                             break;
                         }
-                        if(flag == 0){
-                            if (flag ==0){
-                            char hmm[] = "Sorry max chatters have been reached. See Ya!";
-                            send(socket_client, hmm, strlen(hmm), 0);
-                            break;
-                            }
-                        }
+                    
+                    }
+                    if(flag == 0){
+                        char hmm[] = "Sorry max chatters have been reached. See Ya!";
+                        send(socket_client, hmm, strlen(hmm), 0);
+                        break;
                     }
                     
                 }
