@@ -123,20 +123,12 @@ int main(int argc, char* argv[]) {
                         NI_NUMERICHOST);
 
                     for (int a = 0; a < MAX_CHATTERS; a++) {
-                        int flag=0;
                         printf("%d\n", a);
                         if (chatters[a] == NULL) {
-                            flag = 1;
                             chatters[a] = (struct chatter*)malloc(sizeof(struct chatter));
                             chatters[a]->first_send = 0;
                             chatters[a]->socket = socket_client;
                             printf("New connection from %d\n", chatters[a]->socket);
-                            break;
-                        }
-                        if(flag == 0){
-                            if (flag ==0){
-                            char hmm[] = "Sorry max chatters have been reached. See Ya!";
-                            send(socket_client, hmm, strlen(hmm), 0);
                             break;
                         }
                     }
@@ -194,7 +186,7 @@ int main(int argc, char* argv[]) {
                             if (chatters[k]->first_send == 0) {
                                 if (checkduplicatename(read, chatters)==0){
                                     char hmm[] = "Someone in the chatroom already has that name. See Ya!";
-                                    vchatters[k]->socket, hmm, strlen(hmm), 0);
+                                    send(chatters[k]->socket, hmm, strlen(hmm), 0);
                                     chatters[k] = NULL;
                                     break;
                                 }

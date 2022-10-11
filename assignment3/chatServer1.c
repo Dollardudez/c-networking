@@ -99,7 +99,7 @@ int main(int argc, char* argv[]) {
                             char hmm[] = "Sorry max chatters have been reached. See Ya!";
                             send(socket_client, hmm, strlen(hmm), 0);
                             break;
-                        
+                            }
                         }
                     }
                     
