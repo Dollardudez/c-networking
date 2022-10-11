@@ -20,7 +20,7 @@ char* port;
 char* namecopy;
 SOCKET sockfd;
 int main(int argc, char* argv[]) {
-    char **port_and_name = malloc (sizeof (char *) * 3);
+    char **port_and_name = (char **)malloc(sizeof (char *) * 3);
     parse_cmd_args(argc, argv);
     signal(SIGINT, handle_sigint);
     registerclient();
@@ -87,6 +87,8 @@ void connect_to_server(char **port_and_name){
     struct sockaddr_in  serv_addr;
     memset((char*)&serv_addr, 0, sizeof(serv_addr));
     unsigned short port;
+    port_and_name[0] =malloc(sizeof(char)*50);
+    printf("here");
     sscanf(port_and_name[0], "%hu", &port);
     printf("port %hu\n", port);
     serv_addr.sin_family = AF_INET;
