@@ -16,7 +16,35 @@ fd_set setup_select(struct timeval timeout);
 SOCKET sockfd;
 int main(int argc, char* argv[]) {
     char **port_and_name = malloc (sizeof (char *) * 3);
-    parse_cmd_args(argc, argv, port_and_name);
+    
+    char* portcopy;
+    char* namecopy;
+    if (argc < 3) {
+        fprintf(stderr, "./chatClient1 serverport \"username\"\n");
+        exit(0);
+    }
+    if (argc > 3) {
+        fprintf(stderr, "Too many arguments. See Ya!\nDo this next time -> ./chatClient1 serverport \"username\"\n");
+        exit(0);
+    }
+
+    if (strlen(argv[2]) > 20) {
+        printf("Cannot have more than 20 chars in Chatroom Name");
+        exit(0);
+    }
+
+    int len = strlen(argv[1]);
+    portcopy = malloc(len + 1);
+    strcpy(portcopy, argv[1]);
+
+    len = strlen(argv[2]);
+    namecopy = malloc(len + 1);
+    strcpy(namecopy, argv[2]);
+
+    strncpy (port_and_name[0], portcopy, strlen(portcopy)+1);
+    strncpy (port_and_name[1], namecopy, strlen(namecopy)+1);
+
+    
     signal(SIGINT, handle_sigint);
     connect_to_server(port_and_name);
     

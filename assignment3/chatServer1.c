@@ -17,7 +17,26 @@ int main(int argc, char* argv[]) {
     int first_chatter = 0;
     struct chatter* chatters[MAX_CHATTERS];
     char **port_and_room = malloc (3*sizeof (char *));
-    parse_cmd_args(argc, argv, port_and_room);
+    if (argc < 3) {
+        fprintf(stderr, "./chatServer port \"roomname\"\n");
+        return 1;
+    }
+    if (argc > 3) {
+        fprintf(stderr, "Too many arguments. See Ya!\nDo this next time -> ./chatServer1 port \"Username\"\n");
+        exit(0);
+    }
+
+    if (strlen(argv[2]) > 20) {
+        printf("Cannot have more than 20 chars in Chatroom Name");
+        return 1;
+    }
+
+
+    printf("If you entered an invalid port number, I will just assign you a good one\n");
+
+    memcpy(port_and_room[0], argv[1], strlen(argv[1])+1);
+    memcpy(port_and_room[1], argv[2], strlen(argv[2])+1);
+
     signal(SIGINT, handle_sigint);
 
     setup_server(port_and_room);
