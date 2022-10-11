@@ -43,7 +43,7 @@ int main(int argc, char* argv[]) {
 
     signal(SIGINT, handle_sigint);
 
-    struct chatter* chatters[5] = { NULL };
+    struct chatter* chatters[MAX_CHATTERS] = { NULL };
 
 
     int socket_listen;
@@ -122,7 +122,7 @@ int main(int argc, char* argv[]) {
                         address_buffer, sizeof(address_buffer), 0, 0,
                         NI_NUMERICHOST);
 
-                    for (int a = 0; a < 5; a++) {
+                    for (int a = 0; a < MAX_CHATTERS; a++) {
                         printf("%d\n", a);
                         if (chatters[a] == NULL) {
                             chatters[a] = (struct chatter*)malloc(sizeof(struct chatter));

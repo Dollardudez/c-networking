@@ -15,7 +15,8 @@ int checkduplicatename(char* s, struct chatter* chatters[]);
 int socket_listen;
 int main(int argc, char* argv[]) {
     int first_chatter = 0;
-    struct chatter* chatters[MAX_CHATTERS];
+    struct chatter* chatters[MAX_CHATTERS] = { NULL };
+
     char **port_and_room = (char **)malloc (sizeof(char *)*3);
     if (argc < 3) {
         printf("./chatServer port \"roomname\"\n");
