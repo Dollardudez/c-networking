@@ -306,10 +306,10 @@ void connect_new_chatter(struct chatter* chatters[], int socket_client){
             printf("%d\n", a);
             chatters[a] = (struct chatter*)malloc(sizeof(struct chatter));
             printf("%d\n", a);
-            chatters[a].first_send = 0;
+            chatters[a]->first_send = 0;
             printf("%d\n", a);
-            chatters[a].socket = socket_client;
-            printf("New connection from %d\n", &chatters[a]->socket);
+            chatters[a]->socket = socket_client;
+            printf("New connection from %d\n", chatters[a]->socket);
             return;
         }
         else{
