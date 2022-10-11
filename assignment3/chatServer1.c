@@ -16,7 +16,7 @@ int socket_listen;
 int main(int argc, char* argv[]) {
     int first_chatter = 0;
     struct chatter* chatters[MAX_CHATTERS];
-    char **port_and_room = malloc (3*sizeof (char *));
+    char **port_and_room = (char **)malloc (sizeof(char *)*3);
     if (argc < 3) {
         printf("./chatServer port \"roomname\"\n");
         return 1;
@@ -34,8 +34,10 @@ int main(int argc, char* argv[]) {
 
     printf("If you entered an invalid port number, I will just assign you a good one\n");
 
-    memcpy(port_and_room[0], argv[1], strlen(argv[1])+1);
-    memcpy(port_and_room[1], argv[2], strlen(argv[2])+1);
+    port_and_room[0] = malloc(strlen(argv[1])+1);
+    port_and_room[1] = malloc(strlen(argv[2])+1);
+    strcpy(port_and_room[0], argv[1]);
+    strcpy(port_and_room[1], argv[2]);
 
     signal(SIGINT, handle_sigint);
 
