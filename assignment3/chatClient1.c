@@ -33,16 +33,10 @@ int main(int argc, char* argv[]) {
         exit(0);
     }
 
-    int len = strlen(argv[1]);
-    portcopy = malloc(len + 1);
-    strcpy(portcopy, argv[1]);
-
-    len = strlen(argv[2]);
-    namecopy = malloc(len + 1);
-    strcpy(namecopy, argv[2]);
-
-    strncpy (port_and_name[0], portcopy, strlen(portcopy)+1);
-    strncpy (port_and_name[1], namecopy, strlen(namecopy)+1);
+    port_and_room[0] = malloc(strlen(argv[1])+1);
+    port_and_room[1] = malloc(strlen(argv[2])+1);
+    strcpy(port_and_room[0], argv[1]);
+    strcpy(port_and_room[1], argv[2]);
 
 
     signal(SIGINT, handle_sigint);
