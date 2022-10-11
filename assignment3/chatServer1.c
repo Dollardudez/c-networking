@@ -68,7 +68,7 @@ int main(int argc, char* argv[]) {
                         (struct sockaddr*)&client_address,
                         &client_len);
                     if (!ISVALIDSOCKET(socket_client)) {
-                        printf("accept() failed");
+                        printf("accept() failed.\n");
                         return 1;
                     }
 
@@ -82,11 +82,19 @@ int main(int argc, char* argv[]) {
                         address_buffer, sizeof(address_buffer), 0, 0,
                         NI_NUMERICHOST);
 
-                    connect_new_chatter(chatters, socket_client);
-
+                    for (int a = 0; a < 5; a++) {
+                        printf("%d\n", a);
+                        if (chatters[a] == NULL) {
+                            chatters[a] = (struct chatter*)malloc(sizeof(struct chatter));
+                            chatters[a]->first_send = 0;
+                            chatters[a]->socket = socket_client;
+                            printf("New connection from %d\n", chatters[a]->socket);
+                            break;
+                        }
+                    }
                     
                 }
-                
+                ////////////////////////////////////////////////////////////////////////////////////////////////////
                 else {
                     int check = 0;
                     char full_message[1024] = { '\0' };
@@ -102,6 +110,7 @@ int main(int argc, char* argv[]) {
                     int remove = 0;
                     char removedname[21];
                     if (strcmp("\032", read) == 0) {
+                        printf("user has left the chat...\n");
                         remove = 1;
 
                         for (int a = 0; a < MAX_CHATTERS; a++) {
@@ -109,8 +118,6 @@ int main(int argc, char* argv[]) {
                                 if (chatters[a]->socket == i) {
                                     removechatterindex = a;
                                     strncpy(removedname, chatters[a]->name, sizeof(removedname));
-                                    printf("%s has left the chat...\n", removedname);
-
                                 }
                             }
                         }
@@ -129,7 +136,8 @@ int main(int argc, char* argv[]) {
                         memcpy(chatters, newchatters, sizeof(newchatters));
                         check = 3;
                     }
-
+                    memset(full_message, 0, strlen(full_message));
+                    memset(sendername, 0, strlen(sendername));
                     for (int k = 0; k < MAX_CHATTERS; k++) {
                         if (chatters[k] == NULL) {
                             continue;
@@ -169,12 +177,6 @@ int main(int argc, char* argv[]) {
                                 strcat(hmm, " **\n");
                                 send(chatters[k]->socket, hmm, strlen(hmm), 0);
                                 memset(hmm, 0, strlen(hmm));
-                                if(first_chatter == 0){
-                                    first_chatter++;
-                                    strcat(hmm, "You are the first person in this room!\n");
-                                    send(chatters[k]->socket, hmm, strlen(hmm), 0);
-                                    memset(hmm, 0, strlen(hmm));
-                                }
                                 memset(full_message, 0, strlen(full_message));
 
                             }
