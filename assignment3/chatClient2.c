@@ -271,6 +271,7 @@ char* selection(int selection, char* text) {
         printf("%s\n", token);
         if (i == selection) {
             char* tokenception = strtok(token, " ");
+            printf("%s\n", tokenception);
             int j;
             while (tokenception != NULL)
             {
