@@ -86,13 +86,11 @@ void parse_cmd_args(int argc, char *argv[]){
 void connect_to_server(char **port_and_name){
     struct sockaddr_in  serv_addr;
     memset((char*)&serv_addr, 0, sizeof(serv_addr));
-    unsigned short port;
-    port_and_name[0] =malloc(sizeof(char)*50);
-    printf("here");
-    sscanf(port_and_name[0], "%hu", &port);
-    printf("port %hu\n", port);
+    unsigned short short_port;
+
+    sscanf(port, "%hu", &short_port);
     serv_addr.sin_family = AF_INET;
-    serv_addr.sin_port = htons(port);     // short, network byte order
+    serv_addr.sin_port = htons(short_port);     // short, network byte order
     serv_addr.sin_addr.s_addr = inet_addr(SERV_HOST_ADDR);
 
     if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
@@ -264,21 +262,25 @@ void remove_spaces(char* s) {
 char* selection(int selection, char* text) {
     
     char* token = strtok(text, "\n");
+    const char s[2] = " ";
     token = strtok(NULL, "\n");
     int i = 0;
     while (token != NULL)
     {
         printf("%s\n", token);
+        printf("%d\n", i);
+        printf("%d\n", selection);
         if (i == selection) {
-            char* tokenception = strtok(token, " ");
+            char* tokenception = strtok(token, s);
             printf("%s\n", tokenception);
-            int j;
+            int j = 0;
             while (tokenception != NULL)
             {
-                if (j == 7) {
-                    return tokenception;
+                printf( "%s\n", token );
+                if(j ==6){
+                    return token;
                 }
-                tokenception = strtok(NULL, " ");
+                token = strtok(NULL, s);
                 j++;
             }
         }
