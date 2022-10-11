@@ -27,7 +27,7 @@ int main(int argc, char* argv[]) {
     struct addrinfo* bind_address;
     char myport[30];
     sprintf(myport, "%d", SERV_TCP_PORT); 
-    getaddrinfo(SERV_HOST_ADDR, myport, &hints, &bind_address);
+    getaddrinfo(SERV_HOST_ADDR, "8080", &hints, &bind_address);
 
 
     printf("Creating socket...\n");
