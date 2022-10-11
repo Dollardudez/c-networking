@@ -35,7 +35,7 @@ int main(int argc, char* argv[]) {
     socket_listen = socket(bind_address->ai_family,
         bind_address->ai_socktype, bind_address->ai_protocol);
     if (!ISVALIDSOCKET(socket_listen)) {
-        fprintf(stderr, "socket() failed.\n");
+        printf("socket() failed.\n");
         return 1;
     }
 
@@ -43,7 +43,7 @@ int main(int argc, char* argv[]) {
     printf("Binding socket to local address...\n");
     if (bind(socket_listen,
         bind_address->ai_addr, bind_address->ai_addrlen)) {
-        fprintf(stderr, "bind() failed.\n");
+        printf("bind() failed.\n");
         return 1;
     }
     freeaddrinfo(bind_address);
@@ -51,7 +51,7 @@ int main(int argc, char* argv[]) {
 
     printf("Listening...\n");
     if (listen(socket_listen, 10) < 0) {
-        fprintf(stderr, "listen() failed.\n");
+        printf("listen() failed.\n");
         return 1;
     }
 
@@ -68,7 +68,7 @@ int main(int argc, char* argv[]) {
         fd_set reads;
         reads = master;
         if (select(max_socket + 1, &reads, 0, 0, 0) < 0) {
-            fprintf(stderr, "select() failed.\n");
+            printf("select() failed.\n");
             return 1;
         }
         SOCKET i;
@@ -82,7 +82,7 @@ int main(int argc, char* argv[]) {
                         (struct sockaddr*)&client_address,
                         &client_len);
                     if (!ISVALIDSOCKET(socket_client)) {
-                        fprintf(stderr, "accept() failed. \n");
+                        printf("accept() failed. \n");
                         return 1;
                     }
 

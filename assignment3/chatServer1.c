@@ -18,11 +18,11 @@ int main(int argc, char* argv[]) {
     struct chatter* chatters[MAX_CHATTERS];
     char **port_and_room = malloc (3*sizeof (char *));
     if (argc < 3) {
-        fprintf(stderr, "./chatServer port \"roomname\"\n");
+        printf("./chatServer port \"roomname\"\n");
         return 1;
     }
     if (argc > 3) {
-        fprintf(stderr, "Too many arguments. See Ya!\nDo this next time -> ./chatServer1 port \"Username\"\n");
+        printf("Too many arguments. See Ya!\nDo this next time -> ./chatServer1 port \"Username\"\n");
         exit(0);
     }
 
@@ -51,7 +51,7 @@ int main(int argc, char* argv[]) {
         fd_set reads;
         reads = master;
         if (select(max_socket + 1, &reads, 0, 0, 0) < 0) {
-            fprintf(stderr, "select() failed.");
+            printf("select() failed.");
             return 1;
         }
 
@@ -66,7 +66,7 @@ int main(int argc, char* argv[]) {
                         (struct sockaddr*)&client_address,
                         &client_len);
                     if (!ISVALIDSOCKET(socket_client)) {
-                        fprintf(stderr, "accept() failed");
+                        printf("accept() failed");
                         return 1;
                     }
 
@@ -242,11 +242,11 @@ void parse_cmd_args(int argc, char **argv, char **port_and_room){
     char portcopy[50] = { '\0' };
     char *namecopy[50] = { '\0' };
     if (argc < 3) {
-        fprintf(stderr, "Bad command format, try this: ./chatServer1 port \"roomname\"\n");
+        printf("Bad command format, try this: ./chatServer1 port \"roomname\"\n");
         exit(1);
     }
     if (argc > 3) {
-        fprintf(stderr, "Too many arguments. See Ya!\nDo this next time -> ./chatServer1 port \"roomname\"\n");
+        printf("Too many arguments. See Ya!\nDo this next time -> ./chatServer1 port \"roomname\"\n");
         exit(0);
     }
 

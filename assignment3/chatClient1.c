@@ -20,11 +20,11 @@ int main(int argc, char* argv[]) {
     char* portcopy;
     char* namecopy;
     if (argc < 3) {
-        fprintf(stderr, "./chatClient1 serverport \"username\"\n");
+        printf("./chatClient1 serverport \"username\"\n");
         exit(0);
     }
     if (argc > 3) {
-        fprintf(stderr, "Too many arguments. See Ya!\nDo this next time -> ./chatClient1 serverport \"username\"\n");
+        printf("Too many arguments. See Ya!\nDo this next time -> ./chatClient1 serverport \"username\"\n");
         exit(0);
     }
 
@@ -44,7 +44,7 @@ int main(int argc, char* argv[]) {
     strncpy (port_and_name[0], portcopy, strlen(portcopy)+1);
     strncpy (port_and_name[1], namecopy, strlen(namecopy)+1);
 
-    
+
     signal(SIGINT, handle_sigint);
     connect_to_server(port_and_name);
     
@@ -52,7 +52,7 @@ int main(int argc, char* argv[]) {
         struct timeval timeout;
         fd_set reads = setup_select(timeout);
         if (select(sockfd + 1, &reads, 0, 0, &timeout) < 0) {
-            fprintf(stderr, "select() failed.\n");
+            printf("select() failed.\n");
             return 1;
         }
         if (FD_ISSET(sockfd, &reads)) {
@@ -86,11 +86,11 @@ void parse_cmd_args(int argc, char *argv[], char ** port_and_name){
     char* portcopy;
     char* namecopy;
     if (argc < 3) {
-        fprintf(stderr, "./chatClient1 serverport \"username\"\n");
+        printf("./chatClient1 serverport \"username\"\n");
         exit(0);
     }
     if (argc > 3) {
-        fprintf(stderr, "Too many arguments. See Ya!\nDo this next time -> ./chatClient1 serverport \"username\"\n");
+        printf("Too many arguments. See Ya!\nDo this next time -> ./chatClient1 serverport \"username\"\n");
         exit(0);
     }
 
