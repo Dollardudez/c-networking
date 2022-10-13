@@ -6,6 +6,7 @@
 #include<signal.h>
 #include<pthread.h>
 
+void parse_cmdline_args(int argc, char *argv[]);
 void registerwithdir(char port[], char name[], int cmd);
 void handle_sigint(int sig);
 int checkduplicatename(char* s, struct chatter* chatters[]);
@@ -15,32 +16,8 @@ char* namecopy;
 SOCKET socket_listen;
 int main(int argc, char* argv[]) {
 
-    if (argc < 3) {
-        printf("./chatServer port \"roomname\"\n");
-        return 1;
-    }
-    if (argc > 3) {
-        printf("Too many arguments. See Ya!\nDo this next time -> ./chatServer1 port \"Username\"\n");
-        exit(0);
-    }
-
-    if (strlen(argv[2]) > 20) {
-        printf("Cannot have more than 20 chars in Chatroom Name");
-        return 1;
-    }
-
-
-    printf("If you entered an invalid port number, I will just assign you a good one\n");
-
-
-    int len = strlen(argv[1]);
-    portcopy = malloc(len + 1);
-    strcpy(portcopy, argv[1]);
-
-    len = strlen(argv[2]);
-    namecopy = malloc(len + 1);
-    strcpy(namecopy, argv[2]);
-
+    
+    parse_cmdline_args(argc, argv);
     signal(SIGINT, handle_sigint);
 
     struct chatter* chatters[MAX_CHATTERS] = { NULL };
@@ -397,4 +374,32 @@ int checkduplicatename(char* s, struct chatter* chatters[]) {
         }
     }
     return 1;
+}
+
+void parse_cmdline_args(int argc, char *argv[]){
+    if (argc < 3) {
+        printf("./chatServer port \"roomname\"\n");
+        return 1;
+    }
+    if (argc > 3) {
+        printf("Too many arguments. See Ya!\nDo this next time -> ./chatServer1 port \"Username\"\n");
+        exit(0);
+    }
+
+    if (strlen(argv[2]) > 20) {
+        printf("Cannot have more than 20 chars in Chatroom Name");
+        return 1;
+    }
+
+
+    printf("If you entered an invalid port number, I will just assign you a good one\n");
+
+
+    int len = strlen(argv[1]);
+    portcopy = malloc(len + 1);
+    strcpy(portcopy, argv[1]);
+
+    len = strlen(argv[2]);
+    namecopy = malloc(len + 1);
+    strcpy(namecopy, argv[2]);
 }

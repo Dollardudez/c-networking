@@ -24,6 +24,8 @@ int main(int argc, char* argv[]) {
     parse_cmd_args(argc, argv);
     signal(SIGINT, handle_sigint);
     registerclient();
+    port_and_name[0] = malloc(strlen(port)+1);
+    port_and_name[1] = malloc(strlen(namecopy)+1);
     port_and_name[0] = port;
     port_and_name[1] = namecopy;
     connect_to_server(port_and_name);
