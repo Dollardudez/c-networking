@@ -379,7 +379,7 @@ int checkduplicatename(char* s, struct chatter* chatters[]) {
 void parse_cmdline_args(int argc, char *argv[]){
     if (argc < 3) {
         printf("./chatServer port \"roomname\"\n");
-        return 1;
+        exit(1);
     }
     if (argc > 3) {
         printf("Too many arguments. See Ya!\nDo this next time -> ./chatServer1 port \"Username\"\n");
@@ -388,7 +388,7 @@ void parse_cmdline_args(int argc, char *argv[]){
 
     if (strlen(argv[2]) > 20) {
         printf("Cannot have more than 20 chars in Chatroom Name");
-        return 1;
+        exit(1);
     }
 
 
