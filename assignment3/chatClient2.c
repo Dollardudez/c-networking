@@ -285,6 +285,7 @@ char* selection(int selection, char* text) {
     const char delim[] = " ";
     int quote = '"';
     int i = 0;
+    char* token = strtok(NULL, "\n");
     printf("%s \n", token);
     while (token != NULL)
     {
