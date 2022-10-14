@@ -288,11 +288,11 @@ char* selection(int selection, char* text) {
     printf(" substring %s\n", substring);
     char* token = strtok(substring, s);
     printf(" token %s\n", token);
-    token = strtok(token, s);
+    token = strtok(NULL, s);
     printf(" token %s\n", token);
     token = strtok(token, s);
     printf(" token %s\n", token);
-    token = strtok(token, s);
+    token = strtok(NULL, s);
         printf(" token %s\n", token);
 
     token = strtok(token, s);
