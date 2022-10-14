@@ -180,7 +180,8 @@ char* getServerText(struct chatroom* rooms[]) {
 int registerchatroom(char * s, struct chatroom** rooms){
     
     char tokens[4][100];
-    char* token = strtok(s, " ");
+    printf("%s", s);
+    char* token = strtok(s, "^^^^");
     int i = 0;
     while (token != NULL)
     {
@@ -214,7 +215,7 @@ int registerchatroom(char * s, struct chatroom** rooms){
                 return 4;
             }
         }
-        token = strtok(NULL, " ");
+        token = strtok(NULL, "^^^^");
     }
     int flag = 0;
     if (checkduplicatename(tokens[0], rooms) == 0) return 2;
