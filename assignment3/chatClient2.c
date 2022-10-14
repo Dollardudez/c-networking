@@ -299,9 +299,11 @@ char* selection(int selection, char* text) {
                 if(j == 3){
                     strcpy(host_space_port, token);
                     strcat(host_space_port, " ");
+                    printf("host %s\n", host_space_port);
                 }
                 if(j == 6){
                     strcat(host_space_port, token);
+                     printf("port %s\n", host_space_port);
                     return host_space_port;
                 }
                 token = strtok(NULL, s);
