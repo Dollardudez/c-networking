@@ -241,17 +241,20 @@ void registerclient() {
             char write[20];
             scanf("%d", &a);
             char *host_space_port = selection(a, read);
-            printf("%s\n", host_space_port);
-            char* token = strtok(host_space_port, " ");
-            printf("%s\n", token);
-            strcpy(hostcopy, token);
-            printf("hey\n");
-            token = strtok(NULL, " ");
-            token = strtok(host_space_port, " ");
-            printf("%s\n", token);
-
-            strcpy(port, token);
-            printf("%s", port);
+            char delim[] = " ";
+            char *token;
+            int counter = 1;
+            for (token = strtok(host_space_port, delim); token; token = strtok(NULL, delim))
+            {
+                if(counter == 1){
+                    strcpy(hostcopy, token);
+                }
+                else{
+                    strcpy(port, token);
+                }
+                printf("token=%s\n", token);
+                counter++;
+            }
             if (port == NULL) {
                 printf("Invalid selection, returned NULL");
                 close(socket_peer);
