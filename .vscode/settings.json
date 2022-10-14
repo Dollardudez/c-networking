@@ -3,6 +3,7 @@
         "socket.h": "c",
         "typeinfo": "c",
         "structures.h": "c",
-        "inet.h": "c"
+        "inet.h": "c",
+        "type_traits": "c"
     }
 }

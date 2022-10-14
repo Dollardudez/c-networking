@@ -30,28 +30,7 @@ int main(int argc, char* argv[]) {
 
     printf("Creating socket...\n");
     SOCKET socket_listen;
-    socket_listen = socket(bind_address->ai_family,
-        bind_address->ai_socktype, bind_address->ai_protocol);
-    if (!ISVALIDSOCKET(socket_listen)) {
-        printf("socket() failed.\n");
-        return 1;
-    }
-
-
-    printf("Binding socket to local address...\n");
-    if (bind(socket_listen,
-        bind_address->ai_addr, bind_address->ai_addrlen)) {
-        printf("bind() failed.\n");
-        return 1;
-    }
-    freeaddrinfo(bind_address);
-
-
-    printf("Listening...\n");
-    if (listen(socket_listen, 10) < 0) {
-        printf("listen() failed.\n");
-        return 1;
-    }
+    setup_directory_server(socket_listen, bind_address);
 
     fd_set master;
     FD_ZERO(&master);
@@ -190,6 +169,7 @@ char* getServerText(struct chatroom* rooms[]) {
     return returnedstring;
 }
 
+
 int registerchatroom(char * s, struct chatroom** rooms){
     
     char tokens[3][100];
@@ -264,4 +244,30 @@ int checkduplicatename(char* s, struct chatroom** rooms) {
         }
     }
     return 1;
+}
+
+
+void setup_directory_server(SOCKET socket_listen, struct addrinfo* bind_address){
+    socket_listen = socket(bind_address->ai_family,
+        bind_address->ai_socktype, bind_address->ai_protocol);
+    if (!ISVALIDSOCKET(socket_listen)) {
+        printf("socket() failed.\n");
+        return 1;
+    }
+
+
+    printf("Binding socket to local address...\n");
+    if (bind(socket_listen,
+        bind_address->ai_addr, bind_address->ai_addrlen) != 0) {
+        printf("bind() failed.\n");
+        return 1;
+    }
+    freeaddrinfo(bind_address);
+
+
+    printf("Listening...\n");
+    if (listen(socket_listen, 10) < 0) {
+        printf("listen() failed.\n");
+        return 1;
+    }
 }
