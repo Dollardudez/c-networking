@@ -284,10 +284,10 @@ char* selection(int selection, char* text) {
     const char s[2] = " ";
     const char ch = '"';
     char *substring;
-    char *token;
     substring = strrchr(text, ch);
     printf(" substring %s\n", substring);
-    token = strtok(substring, s);
+    char* token = strtok(substring, s);
+    printf(" token %s\n", token);
     int i = 0;
     while (token != NULL)
     {
