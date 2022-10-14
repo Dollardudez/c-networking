@@ -296,21 +296,17 @@ char* selection(int selection, char* text) {
         }
         if (i == selection) {
             token = strtok(NULL, "\n");
-            printf("tok %s \n", token);
             char *substring = malloc(strlen(token));
             substring = strrchr(token, quote);
-            printf("sub %s \n", substring);
             char* tokenception = strtok(substring, delim);
             int j = 0;
             while (tokenception != NULL)
             {
                 if(j == 3){
-                    printf("%s \n", tokenception);
                     strcpy(host_space_port, tokenception);
                     strcat(host_space_port, " ");
                 }
                 if(j == 6){
-                    printf("%s \n", tokenception);
                     strcat(host_space_port, tokenception);
                     return host_space_port;
                 }
