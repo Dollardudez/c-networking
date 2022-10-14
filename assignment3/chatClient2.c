@@ -89,7 +89,7 @@ void connect_to_server(char **port_and_name_host){
     port_and_name_host[0] = port;
     port_and_name_host[1] = namecopy;
     port_and_name_host[2] = hostcopy;
-    
+
     struct sockaddr_in  serv_addr;
     memset((char*)&serv_addr, 0, sizeof(serv_addr));
     unsigned short short_port;
@@ -273,9 +273,6 @@ char* selection(int selection, char* text) {
     int i = 0;
     while (token != NULL)
     {
-        printf("%s\n", token);
-        printf("%d\n", i);
-        printf("%d\n", selection);
         if (i == selection) {
             char* tokenception = strtok(token, s);
             printf("%s\n", tokenception);
