@@ -132,9 +132,11 @@ int main(int argc, char* argv[]) {
                         for (int i = 0; i < MAX_CHATROOMS; i++) {
                             if (chatrooms[i] != NULL) {
                                 if (chatrooms[i]->active != 0) {
-                                for (int j = 0; j < MAX_CHATROOMS; j++) {
-                                    if (newchatrooms[j] == NULL) {
-                                        newchatrooms[j] = chatrooms[i];
+                                    printf("%s", chatrooms[i]->name);
+                                    for (int j = 0; j < MAX_CHATROOMS; j++) {
+                                        if (newchatrooms[j] == NULL) {
+                                            newchatrooms[j] = chatrooms[i];
+                                            break;
                                         }
                                     }                        
                                 }
