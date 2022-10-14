@@ -294,11 +294,12 @@ char* selection(int selection, char* text) {
     printf(" token %s\n", token);
     token = strtok(NULL, s);
         printf(" token %s\n", token);
-
+token = strtok(NULL, s);
     token = strtok(token, s);
         printf(" token %s\n", token);
-
+token = strtok(NULL, s);
     token = strtok(token, s);
+    token = strtok(NULL, s);
     printf(" token %s\n", token);
     int i = 0;
     while (token != NULL)
