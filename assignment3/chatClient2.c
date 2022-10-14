@@ -15,8 +15,8 @@ void handle_read();
 void handle_write();
 fd_set setup_select(struct timeval timeout);
 
-char* hostcopy;
-char* port;
+char hostcopy[30];
+char port[7];
 char* namecopy;
 SOCKET sockfd;
 int main(int argc, char* argv[]) {
