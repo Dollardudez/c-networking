@@ -283,7 +283,7 @@ char* selection(int selection, char* text) {
     char* host_space_port = malloc (sizeof (char) * 50);
     char* token = strtok(text, "\n");
     const char delim[] = " ";
-    const char quote[] = '"';
+    char quote = '"';
     token = strtok(NULL, "\n");
     int i = 0;
     while (token != NULL)
