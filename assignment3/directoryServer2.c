@@ -217,7 +217,7 @@ int registerchatroom(char * s, struct chatroom** rooms){
             flag = 1;
             rooms[a] = (struct chatroom*)malloc(sizeof(struct chatroom));
             strncpy(rooms[a]->name, tokens[0], sizeof(rooms[a]->name));
-            strncpy(rooms[a]->name, tokens[1], sizeof(rooms[a]->host));
+            strncpy(rooms[a]->host, tokens[1], sizeof(rooms[a]->host));
             char* ptr;
             rooms[a]->socket = strtol(tokens[2], &ptr, 10);
             char* otherptr;
