@@ -241,11 +241,13 @@ void registerclient() {
             char write[20];
             scanf("%d", &a);
             char *host_space_port = selection(a, read);
-            printf("hey");
+            printf("hey\n");
             char* token = strtok(host_space_port, " ");
             strcpy(port, token);
+            printf("hey\n");
             token = strtok(NULL, " ");
             token = strtok(host_space_port, " ");
+            printf("hey\n");
             strcpy(hostcopy, token);
             if (port == NULL) {
                 printf("Invalid selection, returned NULL");
