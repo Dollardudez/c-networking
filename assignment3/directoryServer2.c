@@ -161,7 +161,7 @@ char* getServerText(struct chatroom* rooms[]) {
         if (rooms[i] == NULL) continue;
         else{
             char buffer[100];
-            sprintf(buffer, "%d ) Name: %s | Host: %d | Port: %d\n\n", i, rooms[i]->name, rooms[i]->host, rooms[i]->socket);
+            sprintf(buffer, "%d ) Name: %s | Host: %s | Port: %d\n\n", i, rooms[i]->name, rooms[i]->host, rooms[i]->socket);
             strcat(roominf, buffer);
         }
     }
