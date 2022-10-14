@@ -7,7 +7,7 @@
 #include<pthread.h>
 
 void parse_cmdline_args(int argc, char *argv[]);
-void registerwithdir(char port[], char name[], int cmd);
+void registerwithdir(char host[], char port[], char name[], int cmd);
 void handle_sigint(int sig);
 int checkduplicatename(char* s, struct chatter* chatters[]);
 int IsValidNumber(char * string);
@@ -57,7 +57,7 @@ int main(int argc, char* argv[]) {
 
 
 
-    registerwithdir(text, argv[2], 1);
+    registerwithdir(argv[], text, argv[2], 1);
 
 
 
@@ -254,7 +254,7 @@ int main(int argc, char* argv[]) {
     printf("Closing listening socket...\n");
     CLOSESOCKET(socket_listen);
 
-    registerwithdir(argv[1], argv[2], 0);
+    registerwithdir(argv[1], argv[2], argv[3], 0);
     return 0;
 }
 
@@ -364,7 +364,7 @@ void handle_sigint(int sig)
     printf("Caught signal %d\n", sig);
     CLOSESOCKET(socket_listen);
 
-    registerwithdir(portcopy, namecopy, 0);
+    registerwithdir(hostcopy, portcopy, namecopy, 0);
     printf("Finished.\n");
 
     exit(0);
@@ -384,11 +384,11 @@ int checkduplicatename(char* s, struct chatter* chatters[]) {
 
 void parse_cmdline_args(int argc, char *argv[]){
     if (argc < 4) {
-        printf("./chatServer port \"roomname\"\n");
+        printf("./chatServer port host port \"roomname\"\n");
         exit(1);
     }
     if (argc > 4) {
-        printf("Too many arguments. See Ya!\nDo this next time -> ./chatServer1 host port \"Username\"\n");
+        printf("Too many arguments. See Ya!\nDo this next time -> ./chatServer1 host port \"roomname\"\n");
         exit(0);
     }
 
@@ -405,11 +405,11 @@ void parse_cmdline_args(int argc, char *argv[]){
 
     printf("If you entered an invalid port number, I will just assign you a good one\n");
 
-    len = strlen(argv[1]);
-    namecopy = malloc(len + 1);
-    strcpy(namecopy, argv[1]);
+    int len = strlen(argv[1]);
+    hostcopy = malloc(len + 1);
+    strcpy(hostcopy, argv[1]);
 
-    int len = strlen(argv[2]);
+    len = strlen(argv[2]);
     portcopy = malloc(len + 1);
     strcpy(portcopy, argv[2]);
 
