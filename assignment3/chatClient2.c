@@ -197,7 +197,6 @@ void registerclient() {
     freeaddrinfo(peer_address);
     send(socket_peer, namecopy, 7, 0);
     printf("\nConnected to Directory Server.\n");
-    printf("To send data, enter text followed by enter.\n");
 
     while (1) {
 
