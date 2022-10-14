@@ -57,7 +57,7 @@ int main(int argc, char* argv[]) {
 
 
 
-    registerwithdir(argv[], text, argv[2], 1);
+    registerwithdir(argv[1], text, argv[3], 1);
 
 
 
