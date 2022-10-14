@@ -284,10 +284,8 @@ char* selection(int selection, char* text) {
     char* token = strtok(text, "\n");
     const char delim[] = " ";
     char quote = '"';
-    token = strtok(NULL, "\n");
     int i = 0;
     printf("%s \n", token);
-
     while (token != NULL)
     {
         if (i == selection) {
