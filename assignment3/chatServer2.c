@@ -18,13 +18,12 @@ char* hostcopy;
 
 SOCKET socket_listen;
 int main(int argc, char* argv[]) {
-
+    int first_chatter = 0;
     
     parse_cmdline_args(argc, argv);
     signal(SIGINT, handle_sigint);
 
     struct chatter* chatters[MAX_CHATTERS] = { NULL };
-
 
     int socket_listen;
     struct sockaddr_in my_addr;
@@ -204,6 +203,10 @@ int main(int argc, char* argv[]) {
                                 sprintf(hmm, "** Welcome to [%s], ", namecopy);
                                 strcat(hmm, chatters[k]->name);
                                 strcat(hmm, " **\n");
+                                if(first_chatter == 0){
+                                    strcat(hmm, "You are the first person in the chatroom.\n");
+                                    first_chatter = 1;
+                                }
                                 send(chatters[k]->socket, hmm, strlen(hmm), 0);
                                 memset(hmm, 0, strlen(hmm));
                                 memset(full_message, 0, strlen(full_message));

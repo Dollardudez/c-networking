@@ -181,10 +181,14 @@ int main(int argc, char* argv[]) {
                         }
                         if (check == 1) {
                             if (chatters[k]->socket == i) {
-                                char hmm[100];
+                                char hmm[150];
                                 sprintf(hmm, "** Welcome to [%s], ", port_and_room[1]);
                                 strcat(hmm, chatters[k]->name);
                                 strcat(hmm, " **\n");
+                                if(first_chatter == 0){
+                                    strcat(hmm, "You are the first person in the chatroom.\n");
+                                    first_chatter = 1;
+                                }
                                 send(chatters[k]->socket, hmm, strlen(hmm), 0);
                                 memset(hmm, 0, strlen(hmm));
                                 memset(full_message, 0, strlen(full_message));
