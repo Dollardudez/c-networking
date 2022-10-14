@@ -245,11 +245,11 @@ void registerclient() {
             char* token = strtok(host_space_port, " ");
             printf("%s\n", token);
             strcpy(hostcopy, token);
-            printf("%s\n", hostcopy);
             printf("hey\n");
             token = strtok(NULL, " ");
             token = strtok(host_space_port, " ");
-            printf("hey\n");
+            printf("%s\n", token);
+
             strcpy(port, token);
             printf("%s", port);
             if (port == NULL) {
