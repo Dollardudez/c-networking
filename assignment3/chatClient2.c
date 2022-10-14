@@ -279,7 +279,7 @@ char* selection(int selection, char* text) {
             int j = 0;
             while (tokenception != NULL)
             {
-                printf( "%d - %s\n", token, j );
+                printf( "%d - %s\n", j, token );
                 if(j ==6){
                     ;
                 }
