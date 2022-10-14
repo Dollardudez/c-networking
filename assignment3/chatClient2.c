@@ -24,11 +24,7 @@ int main(int argc, char* argv[]) {
     parse_cmd_args(argc, argv);
     signal(SIGINT, handle_sigint);
     registerclient();
-    port_and_name[0] = malloc(strlen(port)+1);
-    port_and_name[1] = malloc(strlen(namecopy)+1);
-    port_and_name[2] = malloc(strlen(hostcopy)+1);
-    port_and_name[0] = port;
-    port_and_name[1] = namecopy;
+    
     connect_to_server(port_and_name_host);
 
     
@@ -87,6 +83,13 @@ void parse_cmd_args(int argc, char *argv[]){
 
 
 void connect_to_server(char **port_and_name_host){
+    port_and_name_host[0] = malloc(strlen(port)+1);
+    port_and_name_host[1] = malloc(strlen(namecopy)+1);
+    port_and_name_host[2] = malloc(strlen(hostcopy)+1);
+    port_and_name_host[0] = port;
+    port_and_name_host[1] = namecopy;
+    port_and_name_host[2] = hostcopy;
+    
     struct sockaddr_in  serv_addr;
     memset((char*)&serv_addr, 0, sizeof(serv_addr));
     unsigned short short_port;
