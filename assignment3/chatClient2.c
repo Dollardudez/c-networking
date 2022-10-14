@@ -296,16 +296,16 @@ char* selection(int selection, char* text) {
             while (tokenception != NULL)
             {
                 if(j == 3){
-                    printf("%s \n", token);
-                    strcpy(host_space_port, token);
+                    printf("%s \n", tokenception);
+                    strcpy(host_space_port, tokenception);
                     strcat(host_space_port, " ");
                 }
                 if(j == 6){
-                    printf("%s \n", token);
-                    strcat(host_space_port, token);
+                    printf("%s \n", tokenception);
+                    strcat(host_space_port, tokenception);
                     return host_space_port;
                 }
-                token = strtok(NULL, delim);
+                tokenception = strtok(NULL, delim);
                 j++;
             }
         }
