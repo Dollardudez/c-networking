@@ -228,7 +228,7 @@ void registerclient() {
             if(strcmp(read, "List of active chatrooms\n\n") == 0){
                 printf("No active chatrooms. Goodbye.\n");
                 close(socket_peer);
-                return;
+                exit(0);
             }
 
             printf("\n   %s\n", read);
@@ -240,7 +240,7 @@ void registerclient() {
             if(strcmp(host_space_port, "NULL") == 0){
                 printf("Invalid selection.\n");
                 close(socket_peer);
-                return;
+                exit(0);
             }
             char delim[] = " ";
             char *token;

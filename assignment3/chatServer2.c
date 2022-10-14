@@ -138,7 +138,7 @@ int main(int argc, char* argv[]) {
                     int remove = 0;
                     char removedname[21];
                     if (strcmp("\032", read) == 0) {
-                        printf("user has left the chat...\n");
+                        printf("A user has left the chat...\n");
                         remove = 1;
 
                         for (int a = 0; a < MAX_CHATTERS; a++) {
@@ -275,14 +275,12 @@ void registerwithdir(char host[], char port[], char name[], int cmd) {
     }
     int netport = htons(atoi(port));
 
-    printf("Remote address is: ");
     char address_buffer[100];
     char service_buffer[100];
     getnameinfo(peer_address->ai_addr, peer_address->ai_addrlen,
         address_buffer, sizeof(address_buffer),
         service_buffer, sizeof(service_buffer),
         NI_NUMERICHOST);
-    printf("%s %s\n", address_buffer, service_buffer);
 
 
     SOCKET socket_peer;
@@ -294,7 +292,6 @@ void registerwithdir(char host[], char port[], char name[], int cmd) {
     }
 
 
-    printf("Connecting...\n");
     if (connect(socket_peer,
         peer_address->ai_addr, peer_address->ai_addrlen)) {
         printf("connect() failed.\n");
@@ -311,7 +308,6 @@ void registerwithdir(char host[], char port[], char name[], int cmd) {
     char str[2];
     sprintf(str, "%d", cmd);
     strcat(strData, str);
-    printf("%s", strData);
     send(socket_peer, strData, sizeof(strData) + 1, 0);
 
     while (1) {
@@ -337,7 +333,7 @@ void registerwithdir(char host[], char port[], char name[], int cmd) {
             int bytes_received = recv(socket_peer, read, 1024, 0);
             if (bytes_received < 1) {
                 printf("Connection closed by peer.\n");
-                break;
+                exit(0);
             }
             int i = 0;
             for (i = 0; read[i] != '\0'; ++i);
@@ -356,6 +352,7 @@ void registerwithdir(char host[], char port[], char name[], int cmd) {
             if (!fgets(write, 1024, stdin)) break;
             int bytes_sent = send(socket_peer, write, strlen(write), 0);
         }
+        printf("Registered with Directory Server\n");
         close(socket_peer);
         return;
     } //end while(1)
