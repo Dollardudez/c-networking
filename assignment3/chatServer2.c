@@ -342,8 +342,8 @@ void registerwithdir(char host[], char port[], char name[], int cmd) {
             int i = 0;
             for (i = 0; read[i] != '\0'; ++i);
 
-            printf("\n\n** %s **\n", read);
             if (strcmp(read, "Chatroom name already exists") == 0 || strcmp(read,"A max of 3 active chatrooms has been reached.") == 0) {
+                printf("\n\n** %s **\n", read);
                 printf("\n** Goodbye **\n");
                 exit(0);
             }
