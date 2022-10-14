@@ -252,7 +252,7 @@ void setup_directory_server(SOCKET socket_listen, struct addrinfo* bind_address)
         bind_address->ai_socktype, bind_address->ai_protocol);
     if (!ISVALIDSOCKET(socket_listen)) {
         printf("socket() failed.\n");
-        return 1;
+        exit(1);
     }
 
 
@@ -260,7 +260,7 @@ void setup_directory_server(SOCKET socket_listen, struct addrinfo* bind_address)
     if (bind(socket_listen,
         bind_address->ai_addr, bind_address->ai_addrlen) != 0) {
         printf("bind() failed.\n");
-        return 1;
+        exit(1);
     }
     freeaddrinfo(bind_address);
 
@@ -268,6 +268,6 @@ void setup_directory_server(SOCKET socket_listen, struct addrinfo* bind_address)
     printf("Listening...\n");
     if (listen(socket_listen, 10) < 0) {
         printf("listen() failed.\n");
-        return 1;
+        exit(1);
     }
 }
