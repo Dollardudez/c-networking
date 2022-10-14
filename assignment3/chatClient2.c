@@ -240,7 +240,12 @@ void registerclient() {
             int a;
             char write[20];
             scanf("%d", &a);
-            port = selection(a, read);
+            char *host_space_port = selection(a, read);
+            char* token = strtok(host_space_port, " ");
+            strcpy(port, token);
+            token = strtok(NULL, " ");
+            token = strtok(host_space_port, " ");
+            strcpy(hostcopy, token);
             if (port == NULL) {
                 printf("Invalid selection, returned NULL");
                 close(socket_peer);
@@ -266,7 +271,7 @@ void remove_spaces(char* s) {
 
 
 char* selection(int selection, char* text) {
-    
+    char host_space_port[50];
     char* token = strtok(text, "\n");
     const char s[2] = " ";
     token = strtok(NULL, "\n");
@@ -280,8 +285,13 @@ char* selection(int selection, char* text) {
             while (tokenception != NULL)
             {
                 printf( "%d - %s\n", j, token );
-                if(j == 8){
-                    return NULL;
+                if(j == 6){
+                    strcpy(host_space_port, token);
+                    strcat(host_space_port, " ");
+                }
+                if(j == 9){
+                    strcat(host_space_port, token);
+                    return host_space_port;
                 }
                 token = strtok(NULL, s);
                 j++;
