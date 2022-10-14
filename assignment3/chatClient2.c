@@ -280,7 +280,7 @@ char* selection(int selection, char* text) {
             while (tokenception != NULL)
             {
                 printf( "%d - %s\n", j, token );
-                if(s == NULL){
+                if(j == 8){
                     return NULL;
                 }
                 token = strtok(NULL, s);
