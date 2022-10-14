@@ -272,7 +272,7 @@ void remove_spaces(char* s) {
 
 
 char* selection(int selection, char* text) {
-    char host_space_port[50];
+    char* host_space_port = malloc (sizeof (char) * 50);
     char* token = strtok(text, "\n");
     const char s[2] = " ";
     token = strtok(NULL, "\n");
