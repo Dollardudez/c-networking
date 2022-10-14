@@ -281,51 +281,23 @@ void remove_spaces(char* s) {
 
 char* selection(int selection, char* text) {
     char* host_space_port = malloc (sizeof (char) * 50);
-    const char s[2] = " ";
+    const char delim[2] = " ";
+    char *token;
     const char ch = '"';
     char *substring;
     substring = strrchr(text, ch);
-    printf(" substring %s\n", substring);
-    char* token = strtok(substring, s);
-    printf(" token %s\n", token);
-    token = strtok(NULL, s);
-    printf(" token %s\n", token);
-    token = strtok(token, s);
-    printf(" token %s\n", token);
-    token = strtok(NULL, s);
-        printf(" token %s\n", token);
-token = strtok(NULL, s);
-    token = strtok(token, s);
-        printf(" token %s\n", token);
-token = strtok(NULL, s);
-    token = strtok(token, s);
-    token = strtok(NULL, s);
-    printf(" token %s\n", token);
-    int i = 0;
-    while (token != NULL)
+    
+    int counter = 0;
+    for (token = strtok(substring, delim); token; token = strtok(NULL, delim))
     {
-        if (i == selection) {
-            char* tokenception = strtok(token, s);
-            int j = 0;
-            while (tokenception != NULL)
-            {
-                if(j == 3){
-                    strcpy(host_space_port, token);
-                    strcat(host_space_port, " ");
-                    printf("host %s\n", host_space_port);
-                }
-                if(j == 6){
-                    strcat(host_space_port, token);
-                     printf("port %s\n", host_space_port);
-                    return host_space_port;
-                }
-                token = strtok(NULL, s);
-                j++;
-            }
+        if(counter == 3){
+            strcpy(host_space_port, token);
+            strcat(host_space_port, " ")
         }
-        
-        token = strtok(NULL, "\n");
-        i++;
+        if(counter == 6){
+            strcat(host_space_port, token);
+        }
+        counter++;
     }
     return "NULL";
 }
