@@ -281,26 +281,37 @@ void remove_spaces(char* s) {
 
 char* selection(int selection, char* text) {
     char* host_space_port = malloc (sizeof (char) * 50);
-    const char delim[2] = " ";
-    char *token;
-    const char ch = '"';
-    char *substring;
-    substring = strrchr(text, ch);
-    
-    int counter = 0;
-    for (token = strtok(substring, delim); token; token = strtok(NULL, delim))
+    char* token = strtok(text, "\n");
+    const char delim[] = " ";
+    const char quote[] = '"';
+    token = strtok(NULL, "\n");
+    int i = 0;
+    while (token != NULL)
     {
-        if(counter == 3){
-            printf("%s", token);
-            strcpy(host_space_port, token);
-            strcat(host_space_port, " ");
+        if (i == selection) {
+            char *substring;
+            substring = strrchr(text, quote);
+            char* tokenception = strtok(substring, delim);
+            int j = 0;
+            while (tokenception != NULL)
+            {
+                if(j == 3){
+                    printf("%s ", token);
+                    strcpy(host_space_port, token);
+                    strcat(host_space_port, " ");
+                }
+                if(j == 6){
+                    printf("%s ", token);
+                    strcat(host_space_port, token);
+                    return host_space_port;
+                }
+                token = strtok(NULL, delim);
+                j++;
+            }
         }
-        if(counter == 6){
-            printf("%s", token);
-            strcat(host_space_port, token);
-            return host_space_port;
-        }
-        counter++;
+        
+        token = strtok(NULL, "\n");
+        i++;
     }
     return "NULL";
 }
