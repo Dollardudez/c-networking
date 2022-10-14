@@ -285,15 +285,15 @@ char* selection(int selection, char* text) {
     const char delim[] = " ";
     int quote = '"';
     int i = 0;
-    token = strtok(NULL, "\n");
     printf("%s \n", token);
     while (token != NULL)
     {
         if (i == selection) {
+            token = strtok(NULL, "\n");
+            printf("tok %s \n", token);
             char *substring = malloc(strlen(token));
-            strcpy(substring, token);
-            substring = strrchr(text, quote);
-            printf("%s \n", substring);
+            substring = strrchr(token, quote);
+            printf("sub %s \n", substring);
             char* tokenception = strtok(substring, delim);
             int j = 0;
             while (tokenception != NULL)
