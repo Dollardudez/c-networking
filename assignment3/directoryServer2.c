@@ -8,6 +8,7 @@ char* getServerText(struct chatroom* rooms[]);
 int registerchatroom(char* s, struct chatroom** rooms);
 int checkforchatroom(char s[]);
 int checkduplicatename(char* s, struct chatroom** rooms);
+void setup_directory_server(int socket_listen, struct addrinfo* bind_address);
 
 
 
