@@ -310,7 +310,6 @@ void registerwithdir(char host[], char port[], char name[], int cmd) {
     strcat(strData, str);
     printf("%s", strData);
     send(socket_peer, strData, sizeof(strData) + 1, 0);
-    free(strData);
 
     while (1) {
 
@@ -384,7 +383,7 @@ int checkduplicatename(char* s, struct chatter* chatters[]) {
 
 void parse_cmdline_args(int argc, char *argv[]){
     if (argc < 4) {
-        printf("./chatServer port host port \"roomname\"\n");
+        printf("./chatServer port host \"roomname\"\n");
         exit(1);
     }
     if (argc > 4) {
