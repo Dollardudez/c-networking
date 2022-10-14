@@ -285,7 +285,7 @@ char* selection(int selection, char* text) {
     const char ch = '"';
     char *substring;
     char *subsubstring;
-    substring = strchr(text, ch);
+    substring = strrchr(text, ch);
     printf("%s\n", substring);
     subsubstring = strchr(substring, ch);
     printf("%s\n", substring);
