@@ -287,11 +287,11 @@ char* selection(int selection, char* text) {
     substring = strrchr(text, ch);
     printf(" substring %s\n", substring);
     char* token = strtok(substring, s);
-    token = strtok(substring, s);
-    token = strtok(substring, s);
-    token = strtok(substring, s);
-    token = strtok(substring, s);
-    token = strtok(substring, s);
+    token = strtok(token, s);
+    token = strtok(token, s);
+    token = strtok(token, s);
+    token = strtok(token, s);
+    token = strtok(token, s);
     printf(" token %s\n", token);
     int i = 0;
     while (token != NULL)
