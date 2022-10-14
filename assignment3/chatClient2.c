@@ -291,11 +291,14 @@ char* selection(int selection, char* text) {
     for (token = strtok(substring, delim); token; token = strtok(NULL, delim))
     {
         if(counter == 3){
+            printf("%s", token);
             strcpy(host_space_port, token);
             strcat(host_space_port, " ");
         }
         if(counter == 6){
+            printf("%s", token);
             strcat(host_space_port, token);
+            return host_space_port;
         }
         counter++;
     }
