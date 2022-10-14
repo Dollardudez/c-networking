@@ -288,6 +288,12 @@ char* selection(int selection, char* text) {
     printf("%s \n", token);
     while (token != NULL)
     {
+        if(i >2){
+            return "NULL";
+        }
+        if(i < 0){
+            return "NULL";
+        }
         if (i == selection) {
             token = strtok(NULL, "\n");
             printf("tok %s \n", token);
