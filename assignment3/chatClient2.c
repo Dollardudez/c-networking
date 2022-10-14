@@ -279,9 +279,9 @@ char* selection(int selection, char* text) {
             int j = 0;
             while (tokenception != NULL)
             {
-                printf( "%s\n", token );
+                printf( "%d - %s\n", token, j );
                 if(j ==6){
-                    return token;
+                    ;
                 }
                 token = strtok(NULL, s);
                 j++;
