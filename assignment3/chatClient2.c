@@ -241,6 +241,7 @@ void registerclient() {
             char write[20];
             scanf("%d", &a);
             char *host_space_port = selection(a, read);
+            printf("%s", host_space_port);
             if(strcmp(host_space_port, "NULL")!= 0){
                 printf("Invalid selection.\n");
                 close(socket_peer);
