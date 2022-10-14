@@ -52,6 +52,7 @@ int main(int argc, char* argv[]) {
 void handle_sigint(int sig)
 {
     printf("Caught signal %d\n", sig);
+
     printf("Finished.\n");
     send(sockfd, "\032", 12, 0);
     CLOSESOCKET(sockfd);
@@ -105,7 +106,7 @@ void connect_to_server(char **port_and_name_host){
 
     char host[15];
     inet_ntop(AF_INET, &(serv_addr.sin_addr.s_addr), host, INET_ADDRSTRLEN);
-    printf("Attempting connection to: %s:%d\n", host, htons(serv_addr.sin_port));
+    printf("Attempting connection to-> %s:%d\n", host, htons(serv_addr.sin_port));
     /* Connect to the server. */
     if (connect(sockfd, (struct sockaddr*)&serv_addr,
         sizeof(serv_addr)) < 0) {
@@ -114,7 +115,8 @@ void connect_to_server(char **port_and_name_host){
     }
 
     send(sockfd, port_and_name_host[1], strlen(port_and_name_host[1]), 0);
-    printf("\n                    @@ ATTENTION @@\n*********************************************************");
+    printf("Connected.\n\n");
+    printf("                    @@ ATTENTION @@\n*********************************************************");
     printf("\nCannot write more than 99 characters. If you submit > 99,\nI will only send the first 99 chars to the other chatters\n");
     printf("*********************************************************\n\n");
 }
@@ -130,6 +132,7 @@ void handle_read(SOCKET sockfd){
         printf("%s\n", read);
         printf("\nClosing socket...\n");
         CLOSESOCKET(sockfd);
+
         printf("Finished.\n");
         exit(0);
     }
@@ -160,6 +163,7 @@ fd_set setup_select(struct timeval timeout){
 
 
 void registerclient() {
+    printf("Configuring remote address...\n");
     struct addrinfo hints;
     memset(&hints, 0, sizeof(hints));
     hints.ai_socktype = SOCK_STREAM;
@@ -172,14 +176,17 @@ void registerclient() {
         return;
     }
 
+    printf("Remote address is: ");
     char address_buffer[100];
     char service_buffer[100];
     getnameinfo(peer_address->ai_addr, peer_address->ai_addrlen,
         address_buffer, sizeof(address_buffer),
         service_buffer, sizeof(service_buffer),
         NI_NUMERICHOST);
+    printf("%s %s\n", address_buffer, service_buffer);
 
 
+    printf("Creating socket...\n");
     SOCKET socket_peer;
     socket_peer = socket(peer_address->ai_family,
         peer_address->ai_socktype, peer_address->ai_protocol);
@@ -197,7 +204,8 @@ void registerclient() {
     }
     freeaddrinfo(peer_address);
     send(socket_peer, namecopy, 7, 0);
-    printf("Connected to Directory Server\n");
+    printf("Connected.\n");
+    printf("To send data, enter text followed by enter.\n");
 
     while (1) {
 
@@ -283,6 +291,7 @@ char* selection(int selection, char* text) {
     {
         if (i == selection) {
             char* tokenception = strtok(token, s);
+            printf("%s\n", tokenception);
             int j = 0;
             while (tokenception != NULL)
             {
