@@ -281,7 +281,7 @@ char* selection(int selection, char* text) {
             {
                 printf( "%d - %s\n", j, token );
                 if(s == NULL){
-                    return;
+                    return NULL;
                 }
                 token = strtok(NULL, s);
                 j++;
