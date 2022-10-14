@@ -286,9 +286,11 @@ char* selection(int selection, char* text) {
     char *substring;
     char *subsubstring;
     substring = strchr(text, ch);
+    printf("%s\n", substring);
     subsubstring = strchr(substring, ch);
-    char* token = strtok(subsubstring, "\n");
-    printf("%s\n", subsubstring);
+    printf("%s\n", substring);
+    char* token = strtok(subsubstring, s);
+    printf("%s\n", token);
     token = strtok(subsubstring, s);
     int i = 0;
     while (token != NULL)
