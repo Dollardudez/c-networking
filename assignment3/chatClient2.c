@@ -241,6 +241,11 @@ void registerclient() {
             char write[20];
             scanf("%d", &a);
             char *host_space_port = selection(a, read);
+            if(strcmp(host_space_port, "NULL")!= 0){
+                printf("Invalid selection.\n");
+                close(socket_peer);
+                return;
+            }
             char delim[] = " ";
             char *token;
             int counter = 1;
@@ -255,8 +260,8 @@ void registerclient() {
                 printf("token=%s\n", token);
                 counter++;
             }
-            if (port == NULL) {
-                printf("Invalid selection, returned NULL");
+            if (port == 0) {
+                printf("Invalid selection, returned NULL.\n");
                 close(socket_peer);
                 return;
             }
@@ -310,5 +315,5 @@ char* selection(int selection, char* text) {
         token = strtok(NULL, "\n");
         i++;
     }
-    return NULL;
+    return "NULL";
 }
