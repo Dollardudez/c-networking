@@ -8,7 +8,7 @@ char* getServerText(struct chatroom* rooms[]);
 int registerchatroom(char* s, struct chatroom** rooms);
 int checkforchatroom(char s[]);
 int checkduplicatename(char* s, struct chatroom** rooms);
-void setup_directory_server(int socket_listen, struct addrinfo* bind_address);
+int setup_directory_server(struct addrinfo* bind_address);
 
 
 
@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
 
     printf("Creating socket...\n");
     SOCKET socket_listen;
-    setup_directory_server(socket_listen, bind_address);
+    socket_listen = setup_directory_server(bind_address);
 
     fd_set master;
     FD_ZERO(&master);
@@ -248,7 +248,9 @@ int checkduplicatename(char* s, struct chatroom** rooms) {
 }
 
 
-void setup_directory_server(SOCKET socket_listen, struct addrinfo* bind_address){
+int setup_directory_server(struct addrinfo* bind_address){
+    SOCKET socket_listen;
+
     socket_listen = socket(bind_address->ai_family,
         bind_address->ai_socktype, bind_address->ai_protocol);
     if (!ISVALIDSOCKET(socket_listen)) {
@@ -271,4 +273,5 @@ void setup_directory_server(SOCKET socket_listen, struct addrinfo* bind_address)
         printf("listen() failed.\n");
         exit(1);
     }
+    return socket_listen;
 }
