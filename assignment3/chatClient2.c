@@ -241,6 +241,7 @@ void registerclient() {
             char write[20];
             scanf("%d", &a);
             char *host_space_port = selection(a, read);
+            printf("hey");
             char* token = strtok(host_space_port, " ");
             strcpy(port, token);
             token = strtok(NULL, " ");
