@@ -303,11 +303,11 @@ void registerwithdir(char host[], char port[], char name[], int cmd) {
     freeaddrinfo(peer_address);
     char strData[300];
     strncpy(strData, name, sizeof(strData) + 1);
-    strcat(strData, " ");
+    strcat(strData, "^^^^");
     strcat(strData, host);
-    strcat(strData, " ");
+    strcat(strData, "^^^^");
     strcat(strData, port);
-    strcat(strData, " ");
+    strcat(strData, "^^^^");
     char str[2];
     sprintf(str, "%d", cmd);
     strcat(strData, str);
@@ -344,7 +344,7 @@ void registerwithdir(char host[], char port[], char name[], int cmd) {
 
             printf("\n\n** %s **\n", read);
             if (strcmp(read, "Chatroom name already exists") == 0 || strcmp(read,"A max of 3 active chatrooms has been reached.") == 0) {
-                printf("\n** Goodbye **n");
+                printf("\n** Goodbye **\n");
                 exit(0);
             }
             fflush(stdout);
