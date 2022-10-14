@@ -251,6 +251,7 @@ void registerclient() {
             token = strtok(host_space_port, " ");
             printf("hey\n");
             strcpy(port, token);
+            printf("%s", port);
             if (port == NULL) {
                 printf("Invalid selection, returned NULL");
                 close(socket_peer);
