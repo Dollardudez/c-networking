@@ -20,6 +20,7 @@ struct chatroom
     char name[21];
     int socket;
     int active;
+    char host[21];
 };
 
 extern struct chatter (*chatters)[];

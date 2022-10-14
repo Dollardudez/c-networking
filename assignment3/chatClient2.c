@@ -15,20 +15,21 @@ void handle_read();
 void handle_write();
 fd_set setup_select(struct timeval timeout);
 
-
+char* hostcopy;
 char* port;
 char* namecopy;
 SOCKET sockfd;
 int main(int argc, char* argv[]) {
-    char **port_and_name = (char **)malloc(sizeof (char *) * 3);
+    char **port_and_name_host = (char **)malloc(sizeof (char *) * 4);
     parse_cmd_args(argc, argv);
     signal(SIGINT, handle_sigint);
     registerclient();
     port_and_name[0] = malloc(strlen(port)+1);
     port_and_name[1] = malloc(strlen(namecopy)+1);
+    port_and_name[2] = malloc(strlen(hostcopy)+1);
     port_and_name[0] = port;
     port_and_name[1] = namecopy;
-    connect_to_server(port_and_name);
+    connect_to_server(port_and_name_host);
 
     
     while (1) {
@@ -85,7 +86,7 @@ void parse_cmd_args(int argc, char *argv[]){
 }
 
 
-void connect_to_server(char **port_and_name){
+void connect_to_server(char **port_and_name_host){
     struct sockaddr_in  serv_addr;
     memset((char*)&serv_addr, 0, sizeof(serv_addr));
     unsigned short short_port;
@@ -93,7 +94,7 @@ void connect_to_server(char **port_and_name){
     sscanf(port, "%hu", &short_port);
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(short_port);     // short, network byte order
-    serv_addr.sin_addr.s_addr = inet_addr(SERV_HOST_ADDR);
+    serv_addr.sin_addr.s_addr = inet_addr(port_and_name_host[2]);
 
     if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
         perror("client: can't open stream socket");
@@ -110,7 +111,7 @@ void connect_to_server(char **port_and_name){
         exit(1);
     }
 
-    send(sockfd, port_and_name[1], strlen(port_and_name[1]), 0);
+    send(sockfd, port_and_name_host[1], strlen(port_and_name_host[1]), 0);
     printf("Connected.\n\n");
     printf("                    @@ ATTENTION @@\n*********************************************************");
     printf("\nCannot write more than 99 characters. If you submit > 99,\nI will only send the first 99 chars to the other chatters\n");

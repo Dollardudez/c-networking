@@ -10,9 +10,12 @@ void parse_cmdline_args(int argc, char *argv[]);
 void registerwithdir(char port[], char name[], int cmd);
 void handle_sigint(int sig);
 int checkduplicatename(char* s, struct chatter* chatters[]);
+int IsValidNumber(char * string);
 
 char* portcopy;
 char* namecopy;
+char* hostcopy;
+
 SOCKET socket_listen;
 int main(int argc, char* argv[]) {
 
@@ -255,7 +258,7 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
-void registerwithdir(char port[], char name[], int cmd) {
+void registerwithdir(char host[], char port[], char name[], int cmd) {
 
     struct addrinfo hints;
     memset(&hints, 0, sizeof(hints));
@@ -295,8 +298,10 @@ void registerwithdir(char port[], char name[], int cmd) {
         return;
     }
     freeaddrinfo(peer_address);
-    char strData[255];
+    char strData[300];
     strncpy(strData, name, sizeof(strData) + 1);
+    strcat(strData, " ");
+    strcat(strData, host);
     strcat(strData, " ");
     strcat(strData, port);
     strcat(strData, " ");
@@ -305,6 +310,7 @@ void registerwithdir(char port[], char name[], int cmd) {
     strcat(strData, str);
     printf("%s", strData);
     send(socket_peer, strData, sizeof(strData) + 1, 0);
+    free(strData);
 
     while (1) {
 
@@ -336,7 +342,7 @@ void registerwithdir(char port[], char name[], int cmd) {
 
             printf("\n   %s\n", read);
             if (strcmp(read, "Chatroom name already exists") == 0 || strcmp(read,"A max of 3 active chatrooms has been reached.") == 0) {
-                printf("!!!!!!!!!!!!Goodbye. |\n");
+                printf("\n@@@@ Goodbye @@@\n");
                 exit(0);
             }
             fflush(stdout);
@@ -377,29 +383,50 @@ int checkduplicatename(char* s, struct chatter* chatters[]) {
 }
 
 void parse_cmdline_args(int argc, char *argv[]){
-    if (argc < 3) {
+    if (argc < 4) {
         printf("./chatServer port \"roomname\"\n");
         exit(1);
     }
-    if (argc > 3) {
-        printf("Too many arguments. See Ya!\nDo this next time -> ./chatServer1 port \"Username\"\n");
+    if (argc > 4) {
+        printf("Too many arguments. See Ya!\nDo this next time -> ./chatServer1 host port \"Username\"\n");
         exit(0);
     }
 
-    if (strlen(argv[2]) > 20) {
+    if (strlen(argv[3]) > 20) {
         printf("Cannot have more than 20 chars in Chatroom Name");
+        exit(1);
+    }
+
+    if (IsValidNumber(argv[2]) > 20) {
+        printf("port must be a number.");
         exit(1);
     }
 
 
     printf("If you entered an invalid port number, I will just assign you a good one\n");
 
-
-    int len = strlen(argv[1]);
-    portcopy = malloc(len + 1);
-    strcpy(portcopy, argv[1]);
-
-    len = strlen(argv[2]);
+    len = strlen(argv[1]);
     namecopy = malloc(len + 1);
-    strcpy(namecopy, argv[2]);
+    strcpy(namecopy, argv[1]);
+
+    int len = strlen(argv[2]);
+    portcopy = malloc(len + 1);
+    strcpy(portcopy, argv[2]);
+
+    len = strlen(argv[3]);
+    namecopy = malloc(len + 1);
+    strcpy(namecopy, argv[3]);
+}
+
+int IsValidNumber(char * string)
+{
+   for(int i = 0; i < strlen( string ); i ++)
+   {
+      //ASCII value of 0 = 48, 9 = 57. So if value is outside of numeric range then fail
+      //Checking for negative sign "-" could be added: ASCII value 45.
+      if (string[i] < 48 || string[i] > 57)
+         return 0;
+   }
+
+   return 1;
 }

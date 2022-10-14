@@ -161,7 +161,7 @@ char* getServerText(struct chatroom* rooms[]) {
         if (rooms[i] == NULL) continue;
         else{
             char buffer[100];
-            sprintf(buffer, "%d ) Name: %s | Socket: %d | Active: %d\n\n", i, rooms[i]->name, rooms[i]->socket, rooms[i]->active);
+            sprintf(buffer, "%d ) Name: %s | Host: %d | Port: %d\n\n", i, rooms[i]->name, rooms[i]->host, rooms[i]->socket);
             strcat(roominf, buffer);
         }
     }
@@ -173,7 +173,7 @@ char* getServerText(struct chatroom* rooms[]) {
 
 int registerchatroom(char * s, struct chatroom** rooms){
     
-    char tokens[3][100];
+    char tokens[4][100];
     char* token = strtok(s, " ");
     int i = 0;
     while (token != NULL)
@@ -181,16 +181,20 @@ int registerchatroom(char * s, struct chatroom** rooms){
         i++;
         printf("token %d %s\n",i, token);
         if (i == 1) {
-            //tokens[0] = malloc(strlen(token));
+            //name
             strncpy(tokens[0], token, strlen(token)+8);
         }
         if (i == 2) {
-            //tokens[1] = malloc(strlen(token));
+            //host
             strncpy(tokens[1], token, strlen(token)+8);
         }
         if (i == 3) {
-            //tokens[2] = malloc(strlen(token));
+            //port
             strncpy(tokens[2], token, strlen(token)+8);
+        }
+        if (i == 4) {
+            //port
+            strncpy(tokens[3], token, strlen(token)+8);
             if(strcmp(token, "0") == 0){
 
                 for (int i = 0; i < MAX_CHATROOMS; i++) {
@@ -213,10 +217,11 @@ int registerchatroom(char * s, struct chatroom** rooms){
             flag = 1;
             rooms[a] = (struct chatroom*)malloc(sizeof(struct chatroom));
             strncpy(rooms[a]->name, tokens[0], sizeof(rooms[a]->name));
+            strncpy(rooms[a]->name, tokens[1], sizeof(rooms[a]->host));
             char* ptr;
-            rooms[a]->socket = strtol(tokens[1], &ptr, 10);
+            rooms[a]->socket = strtol(tokens[2], &ptr, 10);
             char* otherptr;
-            rooms[a]->active = strtol(tokens[2], &otherptr, 10);
+            rooms[a]->active = strtol(tokens[3], &otherptr, 10);
             break;
         }
     }
