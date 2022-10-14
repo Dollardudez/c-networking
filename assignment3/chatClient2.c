@@ -292,7 +292,7 @@ char* selection(int selection, char* text) {
     {
         if(counter == 3){
             strcpy(host_space_port, token);
-            strcat(host_space_port, " ")
+            strcat(host_space_port, " ");
         }
         if(counter == 6){
             strcat(host_space_port, token);
