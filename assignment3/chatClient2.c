@@ -286,6 +286,8 @@ char* selection(int selection, char* text) {
     char quote = '"';
     token = strtok(NULL, "\n");
     int i = 0;
+    printf("%s \n", token);
+
     while (token != NULL)
     {
         if (i == selection) {
@@ -296,12 +298,12 @@ char* selection(int selection, char* text) {
             while (tokenception != NULL)
             {
                 if(j == 3){
-                    printf("%s ", token);
+                    printf("%s \n", token);
                     strcpy(host_space_port, token);
                     strcat(host_space_port, " ");
                 }
                 if(j == 6){
-                    printf("%s ", token);
+                    printf("%s \n", token);
                     strcat(host_space_port, token);
                     return host_space_port;
                 }
