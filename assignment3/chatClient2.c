@@ -291,6 +291,7 @@ char* selection(int selection, char* text) {
         if (i == selection) {
             char *substring;
             substring = strrchr(text, quote);
+            printf("%s \n", substring);
             char* tokenception = strtok(substring, delim);
             int j = 0;
             while (tokenception != NULL)
