@@ -244,12 +244,12 @@ void registerclient() {
             printf("%s\n", host_space_port);
             char* token = strtok(host_space_port, " ");
             printf("%s\n", token);
-            strcpy(port, token);
+            strcpy(hostcopy, token);
             printf("hey\n");
             token = strtok(NULL, " ");
             token = strtok(host_space_port, " ");
             printf("hey\n");
-            strcpy(hostcopy, token);
+            strcpy(port, token);
             if (port == NULL) {
                 printf("Invalid selection, returned NULL");
                 close(socket_peer);
