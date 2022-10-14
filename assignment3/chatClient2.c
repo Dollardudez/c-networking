@@ -281,9 +281,15 @@ void remove_spaces(char* s) {
 
 char* selection(int selection, char* text) {
     char* host_space_port = malloc (sizeof (char) * 50);
-    char* token = strtok(text, "\n");
     const char s[2] = " ";
-    token = strtok(NULL, "\n");
+    const char ch = '"';
+    char *substring;
+    char *subsubstring;
+    substring = strchr(text, ch);
+    subsubstring = strchr(substring, ch);
+    char* token = strtok(subsubstring, "\n");
+    printf("%s\n", subsubstring);
+    token = strtok(subsubstring, s);
     int i = 0;
     while (token != NULL)
     {
@@ -292,11 +298,11 @@ char* selection(int selection, char* text) {
             int j = 0;
             while (tokenception != NULL)
             {
-                if(j == 6){
+                if(j == 3){
                     strcpy(host_space_port, token);
                     strcat(host_space_port, " ");
                 }
-                if(j == 9){
+                if(j == 6){
                     strcat(host_space_port, token);
                     return host_space_port;
                 }
