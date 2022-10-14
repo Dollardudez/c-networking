@@ -283,13 +283,14 @@ char* selection(int selection, char* text) {
     char* host_space_port = malloc (sizeof (char) * 50);
     char* token = strtok(text, "\n");
     const char delim[] = " ";
-    char quote = '"';
+    int quote = '"';
     int i = 0;
     printf("%s \n", token);
     while (token != NULL)
     {
         if (i == selection) {
-            char *substring;
+            char *substring = malloc(strlen(token));
+            strcpy(substring, token);
             substring = strrchr(text, quote);
             printf("%s \n", substring);
             char* tokenception = strtok(substring, delim);
@@ -309,6 +310,7 @@ char* selection(int selection, char* text) {
                 tokenception = strtok(NULL, delim);
                 j++;
             }
+            free(substring);
         }
         
         token = strtok(NULL, "\n");
