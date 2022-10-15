@@ -88,7 +88,7 @@ int main(int argc, char* argv[]) {
                         CLOSESOCKET(i);
                         continue;
                     }
-                    printf("%S", read);
+                    printf("%s", read);
                     int result = 10;
                     int isChatroom = checkforchatroom(read);
                     if (isChatroom == 0) {
