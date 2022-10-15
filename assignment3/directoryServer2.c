@@ -267,7 +267,7 @@ int setup_directory_server(struct addrinfo* bind_address){
         bind_address->ai_socktype, bind_address->ai_protocol);
     if (!ISVALIDSOCKET(socket_listen)) {
         printf("socket() failed.\n");
-        exit(1);
+        exit(0);
     }
 
 
@@ -275,7 +275,7 @@ int setup_directory_server(struct addrinfo* bind_address){
     if (bind(socket_listen,
         bind_address->ai_addr, bind_address->ai_addrlen) != 0) {
         printf("bind() failed.\n");
-        exit(1);
+        exit(0);
     }
     freeaddrinfo(bind_address);
 
@@ -283,7 +283,7 @@ int setup_directory_server(struct addrinfo* bind_address){
     printf("Listening...\n");
     if (listen(socket_listen, 10) < 0) {
         printf("listen() failed.\n");
-        exit(1);
+        exit(0);
     }
     return socket_listen;
 }

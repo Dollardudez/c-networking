@@ -229,11 +229,11 @@ void registerclient() {
             }
             int i = 0;
             for (i = 0; read[i] != '\0'; ++i);
-            if(strcmp(read, "List of active chatrooms\n\n") == 0){
-                printf("No active chatrooms. Goodbye.\n");
-                close(socket_peer);
-                exit(0);
-            }
+            // if(strcmp(read, "List of active chatrooms\n\n") == 0){
+            //     printf("No active chatrooms. Goodbye.\n");
+            //     close(socket_peer);
+            //     exit(0);
+            // }
 
             printf("\n   %s\n", read);
 
