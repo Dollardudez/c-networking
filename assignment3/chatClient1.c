@@ -159,9 +159,9 @@ fd_set setup_select(struct timeval timeout){
 }
 
 void checkforspaces(char *name){
-    if (strchr(name, ' ') == NULL)
+    if (strchr(name, ' ') != NULL)
     {
-        printf("No spaces in username. Goodbye.\n");
+        printf("No spaces allowed in username. Goodbye.\n");
         exit(0);
     }
 }
