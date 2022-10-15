@@ -13,6 +13,7 @@ void parse_cmd_args(int argc, char *argv[]);
 void connect_to_server(char **port_and_name);
 void handle_read();
 void handle_write();
+void checkforspaces(char *name);
 fd_set setup_select(struct timeval timeout);
 
 char hostcopy[30];
@@ -73,6 +74,9 @@ void parse_cmd_args(int argc, char *argv[]){
         printf("Cannot have more than 20 chars in username. Goodbye.");
         exit(0);
     }
+
+    checkforspaces(argv[1]);
+
 
     int len = strlen(argv[1]);
     namecopy = malloc(len + 1);
@@ -319,4 +323,13 @@ char* selection(int selection, char* text) {
         i++;
     }
     return "NULL";
+}
+
+void checkforspaces(char *name){
+    for (int i=0; strlen(name); i++){
+        if (name[i] == ' ')
+        {
+            printf("No spaces in username. Goodbye.\n")
+        }
+    }
 }

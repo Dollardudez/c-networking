@@ -41,7 +41,6 @@ int main(int argc, char* argv[]) {
 
     bind(socket_listen, (struct sockaddr*)&my_addr, sizeof my_addr);
 
-    printf("Listening...\n");
     if (listen(socket_listen, 10) < 0) {
         printf("listen() failed.\n");
         return 1;
@@ -53,7 +52,7 @@ int main(int argc, char* argv[]) {
         perror("getsockname");
     else
         printf("host info %s:", hostcopy);
-        printf("port number: %d\n", htons(sin.sin_port));
+        printf("%d\n", htons(sin.sin_port));
 
     char text[10];
     sprintf(text, "%d", htons(sin.sin_port));
