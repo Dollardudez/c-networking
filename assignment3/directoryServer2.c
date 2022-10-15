@@ -80,6 +80,7 @@ int main(int argc, char* argv[]) {
                 }
                 ////////////////////////////////////////////////////////////////////////////////////////////////////
                 else {
+                    printf("HEREEEE")
                     char read[1024];
                     int bytes_received = recv(i, read, 1024, 0);
                     if (bytes_received < 1) {
