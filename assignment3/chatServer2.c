@@ -54,12 +54,11 @@ int main(int argc, char* argv[]) {
 
     char text[10];
     sprintf(text, "%d", htons(sin.sin_port));
-    char *host = malloc(strlen(inet_ntoa(my_addr.sin_addr.s_addr)));
-    strcpy(host, inet_ntoa(my_addr.sin_addr.s_addr));
+    hostcopy = inet_ntoa(my_addr.sin_addr.s_addr);
+    printf("%s", host);
 
 
-
-    registerwithdir(argv[1], text, argv[3], 1);
+    registerwithdir(host, text, argv[2], 1);
 
 
 
@@ -260,11 +259,11 @@ int main(int argc, char* argv[]) {
     printf("Closing listening socket...\n");
     CLOSESOCKET(socket_listen);
 
-    registerwithdir(argv[1], argv[2], argv[3], 0);
+    registerwithdir(hostcopy, argv[1], argv[2], 0);
     return 0;
 }
 
-void registerwithdir(char host[], char port[], char name[], int cmd) {
+void registerwithdir(char port[], char name[], int cmd) {
 
     struct addrinfo hints;
     memset(&hints, 0, sizeof(hints));
@@ -304,7 +303,7 @@ void registerwithdir(char host[], char port[], char name[], int cmd) {
     char strData[300];
     strncpy(strData, name, sizeof(strData) + 1);
     strcat(strData, "^^^^");
-    strcat(strData, host);
+    strcat(strData, hostcopy);
     strcat(strData, "^^^^");
     strcat(strData, port);
     strcat(strData, "^^^^");
