@@ -50,7 +50,7 @@ void handle_sigint(int sig)
 {
     printf("Caught signal %d\n", sig);
 
-    printf("Finished.\n");
+    printf("Goodbye.\n");
     send(sockfd, "\032", 12, 0);
     CLOSESOCKET(sockfd);
 
@@ -62,11 +62,11 @@ void parse_cmd_args(int argc, char *argv[], char ** port_and_name){
     char* portcopy;
     char* namecopy;
     if (argc < 3) {
-        printf("./chatClient1 serverport \"username\"\n");
+        printf("Not enough Arguments.\nDo this next time -> ./chatClient1 serverport \"username\"\nGoodbye.\n");
         exit(0);
     }
     if (argc > 3) {
-        printf("Too many arguments. See Ya!\nDo this next time -> ./chatClient1 serverport \"username\"\n");
+        printf("Too many arguments.\nDo this next time -> ./chatClient1 serverport \"username\"\nGoodbye.\n");
         exit(0);
     }
 
@@ -93,17 +93,16 @@ void connect_to_server(char **port_and_name){
     serv_addr.sin_addr.s_addr = inet_addr(SERV_HOST_ADDR);
 
     if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-        perror("client: can't open stream socket");
+        perror("client: can't open stream socket. Goodbye.\n");
         exit(1);
     }
 
     char host[15];
     inet_ntop(AF_INET, &(serv_addr.sin_addr.s_addr), host, INET_ADDRSTRLEN);
-    printf("Attempting connection to-> %s:%d\n", host, htons(serv_addr.sin_port));
     /* Connect to the server. */
     if (connect(sockfd, (struct sockaddr*)&serv_addr,
         sizeof(serv_addr)) < 0) {
-        perror("client: can't connect to server");
+        perror("client: can't connect to server. Goodbye.\n");
         exit(1);
     }
 
@@ -118,7 +117,7 @@ void handle_read(SOCKET sockfd){
     char read[1024] = { '\0' };
     int bytes_received = recv(sockfd, read, 1024, 0);
     if (bytes_received < 1) {
-        printf("Connection closed by peer.\n");
+        printf("Connection closed by peer. Goodbye.\n");
         exit(0);
     }
     if(strcmp("Sorry max chatters have been reached. See Ya!", read) == 0 || strcmp("Someone in the chatroom already has that name. See Ya!", read) == 0) {
@@ -126,7 +125,7 @@ void handle_read(SOCKET sockfd){
         printf("\nClosing socket...\n");
         CLOSESOCKET(sockfd);
 
-        printf("Finished.\n");
+        printf("Goodbye..\n");
         exit(0);
     }
 
@@ -137,7 +136,7 @@ void handle_write(SOCKET sockfd){
     char write[100] = {'\0'};
     if (!fgets(write, 100, stdin)) return;
     else if (strcmp("\n", write) ==0) {
-        printf("Cant send nothing to other chatters!\n");
+        printf("<Cant send nothing to other chatters!>\n");
         return;
     }
     send(sockfd, write, strlen(write), 0);

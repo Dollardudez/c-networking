@@ -61,16 +61,16 @@ void handle_sigint(int sig)
 
 void parse_cmd_args(int argc, char *argv[]){
     if (argc < 2) {
-        printf("./chatClient2 \"username\"\n");
+        printf("Not enough arguments. \nDo this next time ->. /chatClient2 \"username\"\n. Goodbye.");
         exit(0);
     }
     if (argc > 2) {
-        printf("Too many arguments. See Ya!\nDo this next time -> ./chatClient2 \"username\"\n");
+        printf("Too many arguments.\nDo this next time -> ./chatClient2 \"username\"\n. Goodbye.");
         exit(0);
     }
 
     if (strlen(argv[1]) > 20) {
-        printf("Cannot have more than 20 chars in username");
+        printf("Cannot have more than 20 chars in username. Goodbye.");
         exit(0);
     }
 
@@ -99,7 +99,7 @@ void connect_to_server(char **port_and_name_host){
     serv_addr.sin_addr.s_addr = inet_addr(port_and_name_host[2]);
 
     if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-        perror("client: can't open stream socket");
+        perror("client: can't open stream socket. Goodbye.");
         exit(1);
     }
 
@@ -108,7 +108,7 @@ void connect_to_server(char **port_and_name_host){
     /* Connect to the server. */
     if (connect(sockfd, (struct sockaddr*)&serv_addr,
         sizeof(serv_addr)) < 0) {
-        perror("client: can't connect to server");
+        perror("client: can't connect to server. Goodbye.");
         exit(1);
     }
 
@@ -130,7 +130,7 @@ void handle_read(SOCKET sockfd){
         printf("\nClosing socket...\n");
         CLOSESOCKET(sockfd);
 
-        printf("Finished.\n");
+        printf("Goodbye.\n");
         exit(0);
     }
 
@@ -168,7 +168,7 @@ void registerclient() {
     char myport[30];
     sprintf(myport, "%d", SERV_TCP_PORT); 
     if (getaddrinfo(SERV_HOST_ADDR, myport, &hints, &peer_address)) {
-        printf("getaddrinfo() failed.\n");
+        printf("getaddrinfo() failed. Goodbye.\n");
         return;
     }
 
@@ -184,19 +184,19 @@ void registerclient() {
     socket_peer = socket(peer_address->ai_family,
         peer_address->ai_socktype, peer_address->ai_protocol);
     if (!ISVALIDSOCKET(socket_peer)) {
-        printf("socket() failed.\n");
+        printf("socket() failed. Goodbye.\n");
         return;
     }
 
 
     if (connect(socket_peer,
         peer_address->ai_addr, peer_address->ai_addrlen)) {
-        printf("connect() failed.\n");
+        printf("connect() failed. Goodbye.\n");
         return;
     }
     freeaddrinfo(peer_address);
     send(socket_peer, namecopy, 7, 0);
-    printf("\nConnected to Directory Server.\n");
+    printf("\nSuccessfully Connected to Directory Server.\n");
 
     while (1) {
 
@@ -220,7 +220,7 @@ void registerclient() {
             char read[1024] = { '\0' };
             int bytes_received = recv(socket_peer, read, 1024, 0);
             if (bytes_received < 1) {
-                printf("Connection closed by peer.\n");
+                printf("Connection closed by peer. Goodbye.\n");
                 break;
             }
             int i = 0;
@@ -238,7 +238,7 @@ void registerclient() {
             scanf("%d", &a);
             char *host_space_port = selection(a, read);
             if(strcmp(host_space_port, "NULL") == 0){
-                printf("Invalid selection.\n");
+                printf("Invalid selection. Goodbye.\n");
                 close(socket_peer);
                 exit(0);
             }
@@ -256,9 +256,9 @@ void registerclient() {
                 counter++;
             }
             if (port == 0) {
-                printf("Invalid selection, returned NULL.\n");
+                printf("Invalid selection. Goodbye.\n");
                 close(socket_peer);
-                return;
+                exit(0);
             }
             remove_spaces(port);
             

@@ -33,10 +33,11 @@ int main(int argc, char* argv[]) {
     sscanf(portcopy, "%hi", &port);
     my_addr.sin_family = AF_INET;
     my_addr.sin_port = htons(port);     // short, network byte order
-    my_addr.sin_addr.s_addr = inet_addr(SERV_HOST_ADDR);
+    my_addr.sin_addr.s_addr = inet_addr(INADDR_ANY);
     memset(my_addr.sin_zero, '\0', sizeof my_addr.sin_zero);
 
     bind(socket_listen, (struct sockaddr*)&my_addr, sizeof my_addr);
+
 
     printf("Listening...\n");
     if (listen(socket_listen, 10) < 0) {
@@ -53,6 +54,8 @@ int main(int argc, char* argv[]) {
 
     char text[10];
     sprintf(text, "%d", htons(sin.sin_port));
+    char *host = malloc(strlen(inet_ntoa(my_addr.sin_addr.s_addr)));
+    strcpy(host, inet_ntoa(my_addr.sin_addr.s_addr));
 
 
 
@@ -382,21 +385,21 @@ int checkduplicatename(char* s, struct chatter* chatters[]) {
 }
 
 void parse_cmdline_args(int argc, char *argv[]){
-    if (argc < 4) {
-        printf("./chatServer port host \"roomname\"\n");
+    if (argc < 3) {
+        printf("./chatServer port \"roomname\"\n");
         exit(1);
     }
-    if (argc > 4) {
-        printf("Too many arguments. See Ya!\nDo this next time -> ./chatServer1 host port \"roomname\"\n");
+    if (argc > 3) {
+        printf("Too many arguments. See Ya!\nDo this next time -> ./chatServer1 port \"roomname\"\n");
         exit(0);
     }
 
-    if (strlen(argv[3]) > 20) {
+    if (strlen(argv[2]) > 20) {
         printf("Cannot have more than 20 chars in Chatroom Name");
         exit(1);
     }
 
-    if (IsValidNumber(argv[2]) > 20) {
+    if (IsValidNumber(argv[1])) {
         printf("port must be a number.");
         exit(1);
     }
@@ -404,17 +407,14 @@ void parse_cmdline_args(int argc, char *argv[]){
 
     printf("If you entered an invalid port number, I will just assign you a good one\n");
 
-    int len = strlen(argv[1]);
-    hostcopy = malloc(len + 1);
-    strcpy(hostcopy, argv[1]);
+    int len;
+    len = strlen(argv[1]);
+    portcopy = malloc(len + 1);
+    strcpy(portcopy, argv[1]);
 
     len = strlen(argv[2]);
-    portcopy = malloc(len + 1);
-    strcpy(portcopy, argv[2]);
-
-    len = strlen(argv[3]);
     namecopy = malloc(len + 1);
-    strcpy(namecopy, argv[3]);
+    strcpy(namecopy, argv[2]);
 }
 
 int IsValidNumber(char * string)
