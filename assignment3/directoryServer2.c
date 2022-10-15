@@ -190,16 +190,20 @@ int registerchatroom(char * s, struct chatroom** rooms){
         if (i == 1) {
             //name
             strncpy(tokens[0], token, strlen(token)+8);
+            printf("%s", tokens[0]);
         }
         if (i == 2) {
             //host
             strncpy(tokens[1], token, strlen(token)+8);
+            printf("%s", tokens[1]);
         }
         if (i == 3) {
             //port
             strncpy(tokens[2], token, strlen(token)+8);
+            printf("%s", tokens[2]);
         }
         if (i == 4) {
+            printf("%s", tokens[3]);
             //active
             strncpy(tokens[3], token, strlen(token)+8);
             if(strcmp(token, "0") == 0){
