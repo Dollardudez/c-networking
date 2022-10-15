@@ -398,7 +398,7 @@ void parse_cmdline_args(int argc, char *argv[]){
         exit(1);
     }
 
-    if (IsValidNumber(argv[1])) {
+    if (IsValidNumber(argv[1]) == 0) {
         printf("port must be a number.");
         exit(1);
     }
