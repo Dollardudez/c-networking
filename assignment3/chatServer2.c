@@ -34,7 +34,7 @@ int main(int argc, char* argv[]) {
     printf("here\n");
     my_addr.sin_family = AF_INET;
     my_addr.sin_port = htons(port);     // short, network byte order
-    my_addr.sin_addr.s_addr = inet_addr(SERV_TCP_PORT);
+    my_addr.sin_addr.s_addr = inet_addr(SERV_HOST_ADDR);
     memset(my_addr.sin_zero, '\0', sizeof my_addr.sin_zero);
 
     bind(socket_listen, (struct sockaddr*)&my_addr, sizeof my_addr);
