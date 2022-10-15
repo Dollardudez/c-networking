@@ -449,5 +449,3 @@ char* gethostip(){
     printf("Host IP: %s", ip);
     return ip;
 }
-Footer
-© 2022 GitHub, Inc.
