@@ -363,9 +363,6 @@ char* gethostip(){
   
     hostname = gethostname(hostbuffer, sizeof(hostbuffer));  
     host_entry = gethostbyname(hostbuffer);
-  
-    // To convert an Internet network
-    // address into ASCII string
     ip = inet_ntoa(*((struct in_addr*)
                            host_entry->h_addr_list[0]));
   
