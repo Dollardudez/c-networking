@@ -326,10 +326,9 @@ char* selection(int selection, char* text) {
 }
 
 void checkforspaces(char *name){
-    for (int i=0; strlen(name); i++){
-        if (name[i] == ' ')
-        {
-            printf("No spaces in username. Goodbye.\n");
-        }
+    if (strchr(name, ' ') == NULL)
+    {
+        printf("No spaces in username. Goodbye.\n");
+        exit(0);
     }
 }

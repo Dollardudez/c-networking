@@ -10,6 +10,8 @@ void parse_cmd_args(int argc, char *argv[], char ** port_and_name);
 void connect_to_server(char **port_and_name);
 void handle_read();
 void handle_write();
+void checkforspaces(char *name);
+
 fd_set setup_select(struct timeval timeout);
 
 
@@ -74,6 +76,8 @@ void parse_cmd_args(int argc, char *argv[], char ** port_and_name){
         printf("Cannot have more than 20 chars in Chatroom Name");
         exit(0);
     }
+
+    checkforspaces(argv[2]);
 
     port_and_name[0] = malloc(strlen(argv[1])+1);
     port_and_name[1] = malloc(strlen(argv[2])+1);
@@ -152,4 +156,12 @@ fd_set setup_select(struct timeval timeout){
     timeout.tv_sec = 0;
     timeout.tv_usec = 100000;
     return reads;
+}
+
+void checkforspaces(char *name){
+    if (strchr(name, ' ') == NULL)
+    {
+        printf("No spaces in username. Goodbye.\n");
+        exit(0);
+    }
 }
