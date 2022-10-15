@@ -329,7 +329,7 @@ void checkforspaces(char *name){
     for (int i=0; strlen(name); i++){
         if (name[i] == ' ')
         {
-            printf("No spaces in username. Goodbye.\n")
+            printf("No spaces in username. Goodbye.\n");
         }
     }
 }

@@ -309,11 +309,8 @@ void setup_server(char ** port_and_room){
     if (getsockname(socket_listen, (struct sockaddr*)&sin, &lendle) == -1)
         perror("getsockname");
     else
+        printf("host: %s\n", host);
         printf("port: %d\n", htons(sin.sin_port));
-
-
-    //inet_ntop(AF_INET, &(sin.sin_addr.s_addr), host, INET_ADDRSTRLEN);
-    printf("host: %s\n", host);
 }
 
 void connect_new_chatter(struct chatter* chatters[], int socket_client){
@@ -366,6 +363,5 @@ char* gethostip(){
     ip = inet_ntoa(*((struct in_addr*)
                            host_entry->h_addr_list[0]));
   
-    printf("Host IP: %s", ip);
     return ip;
 }
