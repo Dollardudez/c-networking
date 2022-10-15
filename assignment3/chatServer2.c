@@ -407,12 +407,13 @@ void parse_cmdline_args(int argc, char *argv[]){
 
 
     printf("If you entered an invalid port number, I will just assign you a good one\n");
+    printf("hello\n");
 
     int len;
     len = strlen(argv[1]);
     portcopy = malloc(len + 1);
     strcpy(portcopy, argv[1]);
-
+    printf("hello\n");
     len = strlen(argv[2]);
     namecopy = malloc(len + 1);
     strcpy(namecopy, argv[2]);
