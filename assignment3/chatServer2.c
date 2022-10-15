@@ -263,7 +263,7 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
-void registerwithdir(char port[], char name[], int cmd) {
+void registerwithdir(char host[], char port[], char name[], int cmd) {
 
     struct addrinfo hints;
     memset(&hints, 0, sizeof(hints));
@@ -303,7 +303,7 @@ void registerwithdir(char port[], char name[], int cmd) {
     char strData[300];
     strncpy(strData, name, sizeof(strData) + 1);
     strcat(strData, "^^^^");
-    strcat(strData, hostcopy);
+    strcat(strData, host);
     strcat(strData, "^^^^");
     strcat(strData, port);
     strcat(strData, "^^^^");
