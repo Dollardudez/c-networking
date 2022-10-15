@@ -53,6 +53,8 @@ int main(int argc, char* argv[]) {
         printf("port number: %d\n", htons(sin.sin_port));
 
     char text[10];
+    printf("here");
+
     sprintf(text, "%d", htons(sin.sin_port));
     hostcopy = inet_ntoa(my_addr.sin_addr);
     printf("%s", hostcopy);
