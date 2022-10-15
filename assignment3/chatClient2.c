@@ -332,3 +332,4 @@ void checkforspaces(char *name){
         exit(0);
     }
 }
+

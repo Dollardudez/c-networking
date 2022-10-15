@@ -359,7 +359,7 @@ void registerwithdir(char host[], char port[], char name[], int cmd) {
 
 void handle_sigint(int sig)
 {
-    printf("Caught signal %d\n", sig);
+    printf("\nCaught signal %d\n", sig);
     CLOSESOCKET(socket_listen);
 
     registerwithdir(hostcopy, portcopy, namecopy, 0);
