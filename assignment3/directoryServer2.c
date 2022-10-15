@@ -213,12 +213,12 @@ int registerchatroom(char * s, struct chatroom** rooms){
                         }   
                     }                     
                 }
-                printf("%d", rooms[i]->active);
                 return 4;
             }
         }
         token = strtok(NULL, "^^^^");
     }
+
     int flag = 0;
     if (checkduplicatename(tokens[0], rooms) == 0) return 2;
     for (int a = 0; a < MAX_CHATROOMS; a++) {
@@ -234,6 +234,8 @@ int registerchatroom(char * s, struct chatroom** rooms){
             break;
         }
     }
+    printf("%d, %s, %s, %d", rooms[i]->active, rooms[i]->name, rooms[i]->host, rooms[i]->socket);
+
     if(flag ==0) return 3;
     return 1;
 }
