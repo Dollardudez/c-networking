@@ -41,6 +41,7 @@ int main(int argc, char* argv[]) {
 
     bind(socket_listen, (struct sockaddr*)&my_addr, sizeof my_addr);
 
+    printf("Listening...\n");
     if (listen(socket_listen, 10) < 0) {
         printf("listen() failed.\n");
         return 1;
@@ -51,13 +52,16 @@ int main(int argc, char* argv[]) {
     if (getsockname(socket_listen, (struct sockaddr*)&sin, &lendle) == -1)
         perror("getsockname");
     else
-        printf("host info %s:", hostcopy);
-        printf("%d\n", htons(sin.sin_port));
+        printf("port number: %d\n", htons(sin.sin_port));
+        printf("%s\n", hostcopy);
 
     char text[10];
     sprintf(text, "%d", htons(sin.sin_port));
 
+
     registerwithdir(hostcopy, text, argv[2], 1);
+
+
 
     fd_set master;
     FD_ZERO(&master);
@@ -359,7 +363,7 @@ void registerwithdir(char host[], char port[], char name[], int cmd) {
 
 void handle_sigint(int sig)
 {
-    printf("\nCaught signal %d\n", sig);
+    printf("Caught signal %d\n", sig);
     CLOSESOCKET(socket_listen);
 
     registerwithdir(hostcopy, portcopy, namecopy, 0);
@@ -402,11 +406,13 @@ void parse_cmdline_args(int argc, char *argv[]){
 
 
     printf("If you entered an invalid port number, I will just assign you a good one\n");
+    printf("hello\n");
 
     int len;
     len = strlen(argv[1]);
     portcopy = malloc(len + 1);
     strcpy(portcopy, argv[1]);
+    printf("hello\n");
     len = strlen(argv[2]);
     namecopy = malloc(len + 1);
     strcpy(namecopy, argv[2]);
@@ -433,8 +439,12 @@ char* gethostip(){
   
     hostname = gethostname(hostbuffer, sizeof(hostbuffer));  
     host_entry = gethostbyname(hostbuffer);
+  
+    // To convert an Internet network
+    // address into ASCII string
     ip = inet_ntoa(*((struct in_addr*)
                            host_entry->h_addr_list[0]));
   
+    printf("Host IP: %s", ip);
     return ip;
 }

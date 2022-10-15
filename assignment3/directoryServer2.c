@@ -87,7 +87,6 @@ int main(int argc, char* argv[]) {
                         CLOSESOCKET(i);
                         continue;
                     }
-                    printf("read");
                     int result = 10;
                     int isChatroom = checkforchatroom(read);
                     if (isChatroom == 0) {
@@ -191,21 +190,17 @@ int registerchatroom(char * s, struct chatroom** rooms){
         if (i == 1) {
             //name
             strncpy(tokens[0], token, strlen(token)+8);
-            printf("%s", tokens[0]);
         }
         if (i == 2) {
             //host
             strncpy(tokens[1], token, strlen(token)+8);
-            printf("%s", tokens[1]);
         }
         if (i == 3) {
             //port
             strncpy(tokens[2], token, strlen(token)+8);
-            printf("%s", tokens[2]);
         }
         if (i == 4) {
-            printf("%s", tokens[3]);
-            //active
+            //port
             strncpy(tokens[3], token, strlen(token)+8);
             if(strcmp(token, "0") == 0){
 
@@ -214,7 +209,6 @@ int registerchatroom(char * s, struct chatroom** rooms){
                         if (strcmp(rooms[i]->name, tokens[0]) == 0) {
 
                             rooms[i]->active = 0;
-                            
                         }   
                     }                     
                 }
@@ -223,7 +217,6 @@ int registerchatroom(char * s, struct chatroom** rooms){
         }
         token = strtok(NULL, "^^^^");
     }
-
     int flag = 0;
     if (checkduplicatename(tokens[0], rooms) == 0) return 2;
     for (int a = 0; a < MAX_CHATROOMS; a++) {
@@ -239,8 +232,6 @@ int registerchatroom(char * s, struct chatroom** rooms){
             break;
         }
     }
-    printf("%d, %s, %s, %d", rooms[i]->active, rooms[i]->name, rooms[i]->host, rooms[i]->socket);
-
     if(flag ==0) return 3;
     return 1;
 }
@@ -276,7 +267,7 @@ int setup_directory_server(struct addrinfo* bind_address){
         bind_address->ai_socktype, bind_address->ai_protocol);
     if (!ISVALIDSOCKET(socket_listen)) {
         printf("socket() failed.\n");
-        exit(0);
+        exit(1);
     }
 
 
@@ -284,7 +275,7 @@ int setup_directory_server(struct addrinfo* bind_address){
     if (bind(socket_listen,
         bind_address->ai_addr, bind_address->ai_addrlen) != 0) {
         printf("bind() failed.\n");
-        exit(0);
+        exit(1);
     }
     freeaddrinfo(bind_address);
 
@@ -292,7 +283,7 @@ int setup_directory_server(struct addrinfo* bind_address){
     printf("Listening...\n");
     if (listen(socket_listen, 10) < 0) {
         printf("listen() failed.\n");
-        exit(0);
+        exit(1);
     }
     return socket_listen;
 }
