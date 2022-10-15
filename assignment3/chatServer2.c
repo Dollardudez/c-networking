@@ -54,11 +54,11 @@ int main(int argc, char* argv[]) {
 
     char text[10];
     sprintf(text, "%d", htons(sin.sin_port));
-    hostcopy = inet_ntoa(my_addr.sin_addr.s_addr);
-    printf("%s", host);
+    hostcopy = inet_ntoa(my_addr.sin_addr);
+    printf("%s", hostcopy);
 
 
-    registerwithdir(host, text, argv[2], 1);
+    registerwithdir(hostcopy, text, argv[2], 1);
 
 
 
