@@ -11,6 +11,7 @@ void handle_sigint(int sig);
 void setup_server(char ** port_and_room);
 void connect_new_chatter(struct chatter* chatters[], int socket_client);
 int checkduplicatename(char* s, struct chatter* chatters[]);
+char* gethostip();
 
 int socket_listen;
 int main(int argc, char* argv[]) {
@@ -287,10 +288,12 @@ void setup_server(char ** port_and_room){
     socket_listen = socket(AF_INET, SOCK_STREAM, 0);
 
     short port;
+    char *host = gethostip();
+
     sscanf(port_and_room[0], "%hi", &port);
     my_addr.sin_family = AF_INET;
     my_addr.sin_port = htons(port);     // short, network byte order
-    my_addr.sin_addr.s_addr = inet_addr(SERV_HOST_ADDR);
+    my_addr.sin_addr.s_addr = inet_addr(host);
     memset(my_addr.sin_zero, '\0', sizeof my_addr.sin_zero);
 
     bind(socket_listen, (struct sockaddr*)&my_addr, sizeof my_addr);
@@ -309,8 +312,7 @@ void setup_server(char ** port_and_room){
         printf("port: %d\n", htons(sin.sin_port));
 
 
-    char host[15];
-    inet_ntop(AF_INET, &(sin.sin_addr.s_addr), host, INET_ADDRSTRLEN);
+    //inet_ntop(AF_INET, &(sin.sin_addr.s_addr), host, INET_ADDRSTRLEN);
     printf("host: %s\n", host);
 }
 
@@ -351,4 +353,22 @@ int checkduplicatename(char* s, struct chatter* chatters[]) {
         }
     }
     return 1;
+}
+
+char* gethostip(){
+    char hostbuffer[256];
+    char *ip;
+    struct hostent *host_entry;
+    int hostname;
+  
+    hostname = gethostname(hostbuffer, sizeof(hostbuffer));  
+    host_entry = gethostbyname(hostbuffer);
+  
+    // To convert an Internet network
+    // address into ASCII string
+    ip = inet_ntoa(*((struct in_addr*)
+                           host_entry->h_addr_list[0]));
+  
+    printf("Host IP: %s", ip);
+    return ip;
 }

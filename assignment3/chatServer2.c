@@ -11,6 +11,7 @@ void registerwithdir(char host[], char port[], char name[], int cmd);
 void handle_sigint(int sig);
 int checkduplicatename(char* s, struct chatter* chatters[]);
 int IsValidNumber(char * string);
+char* gethostip();
 
 char* portcopy;
 char* namecopy;
@@ -30,11 +31,13 @@ int main(int argc, char* argv[]) {
 
     socket_listen = socket(AF_INET, SOCK_STREAM, 0);
     short port;
+    hostcopy = gethostip();
+
     sscanf(portcopy, "%hi", &port);
     printf("here\n");
     my_addr.sin_family = AF_INET;
     my_addr.sin_port = htons(port);     // short, network byte order
-    my_addr.sin_addr.s_addr = inet_addr(SERV_HOST_ADDR);
+    my_addr.sin_addr.s_addr = inet_addr(hostcopy);
     memset(my_addr.sin_zero, '\0', sizeof my_addr.sin_zero);
 
     bind(socket_listen, (struct sockaddr*)&my_addr, sizeof my_addr);
@@ -431,4 +434,22 @@ int IsValidNumber(char * string)
    }
 
    return 1;
+}
+
+char* gethostip(){
+    char hostbuffer[256];
+    char *ip;
+    struct hostent *host_entry;
+    int hostname;
+  
+    hostname = gethostname(hostbuffer, sizeof(hostbuffer));  
+    host_entry = gethostbyname(hostbuffer);
+  
+    // To convert an Internet network
+    // address into ASCII string
+    ip = inet_ntoa(*((struct in_addr*)
+                           host_entry->h_addr_list[0]));
+  
+    printf("Host IP: %s", ip);
+    return ip;
 }
