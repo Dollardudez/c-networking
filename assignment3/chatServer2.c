@@ -11,6 +11,8 @@ void registerwithdir(char host[], char port[], char name[], int cmd);
 void handle_sigint(int sig);
 int checkduplicatename(char* s, struct chatter* chatters[]);
 int IsValidNumber(char * string);
+char* gethostip();
+
 
 char* portcopy;
 char* namecopy;
@@ -32,9 +34,10 @@ int main(int argc, char* argv[]) {
     socket_listen = socket(AF_INET, SOCK_STREAM, 0);
     short port;
     sscanf(portcopy, "%hi", &port);
+    hostcopy = gethostip();
     my_addr.sin_family = AF_INET;
     my_addr.sin_port = htons(port);     // short, network byte order
-    my_addr.sin_addr.s_addr = inet_addr(SERV_HOST_ADDR);
+    my_addr.sin_addr.s_addr = inet_addr(hostcopy);
     memset(my_addr.sin_zero, '\0', sizeof my_addr.sin_zero);
 
     bind(socket_listen, (struct sockaddr*)&my_addr, sizeof my_addr);
@@ -51,13 +54,14 @@ int main(int argc, char* argv[]) {
         perror("getsockname");
     else
         printf("port number: %d\n", htons(sin.sin_port));
+        printf("%s\n", hostcopy);
 
     char text[10];
     sprintf(text, "%d", htons(sin.sin_port));
 
 
 
-    registerwithdir(argv[1], text, argv[3], 1);
+    registerwithdir(hostcopy, text, argv[2], 1);
 
 
 
@@ -254,7 +258,7 @@ int main(int argc, char* argv[]) {
     printf("Closing listening socket...\n");
     CLOSESOCKET(socket_listen);
 
-    registerwithdir(argv[1], argv[2], argv[3], 0);
+    registerwithdir(hostcopy, argv[1], argv[2], 0);
     return 0;
 }
 
@@ -382,39 +386,37 @@ int checkduplicatename(char* s, struct chatter* chatters[]) {
 }
 
 void parse_cmdline_args(int argc, char *argv[]){
-    if (argc < 4) {
-        printf("./chatServer port host \"roomname\"\n");
+    if (argc < 3) {
+        printf("./chatServer port \"roomname\"\n");
         exit(1);
     }
-    if (argc > 4) {
-        printf("Too many arguments. See Ya!\nDo this next time -> ./chatServer1 host port \"roomname\"\n");
+    if (argc > 3) {
+        printf("Too many arguments. See Ya!\nDo this next time -> ./chatServer1 port \"roomname\"\n");
         exit(0);
     }
 
-    if (strlen(argv[3]) > 20) {
+    if (strlen(argv[2]) > 20) {
         printf("Cannot have more than 20 chars in Chatroom Name");
         exit(1);
     }
 
-    if (IsValidNumber(argv[2]) > 20) {
+    if (IsValidNumber(argv[1]) == 0) {
         printf("port must be a number.");
         exit(1);
     }
 
 
     printf("If you entered an invalid port number, I will just assign you a good one\n");
+    printf("hello\n");
 
-    int len = strlen(argv[1]);
-    hostcopy = malloc(len + 1);
-    strcpy(hostcopy, argv[1]);
-
-    len = strlen(argv[2]);
+    int len;
+    len = strlen(argv[1]);
     portcopy = malloc(len + 1);
-    strcpy(portcopy, argv[2]);
-
-    len = strlen(argv[3]);
+    strcpy(portcopy, argv[1]);
+    printf("hello\n");
+    len = strlen(argv[2]);
     namecopy = malloc(len + 1);
-    strcpy(namecopy, argv[3]);
+    strcpy(namecopy, argv[2]);
 }
 
 int IsValidNumber(char * string)
@@ -429,3 +431,23 @@ int IsValidNumber(char * string)
 
    return 1;
 }
+
+char* gethostip(){
+    char hostbuffer[256];
+    char *ip;
+    struct hostent *host_entry;
+    int hostname;
+  
+    hostname = gethostname(hostbuffer, sizeof(hostbuffer));  
+    host_entry = gethostbyname(hostbuffer);
+  
+    // To convert an Internet network
+    // address into ASCII string
+    ip = inet_ntoa(*((struct in_addr*)
+                           host_entry->h_addr_list[0]));
+  
+    printf("Host IP: %s", ip);
+    return ip;
+}
+Footer
+© 2022 GitHub, Inc.
