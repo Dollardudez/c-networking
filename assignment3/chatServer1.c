@@ -290,7 +290,7 @@ void setup_server(char ** port_and_room){
     sscanf(port_and_room[0], "%hi", &port);
     my_addr.sin_family = AF_INET;
     my_addr.sin_port = htons(port);     // short, network byte order
-    my_addr.sin_addr.s_addr = inet_addr(SERV_HOST_ADDR);
+    my_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
     memset(my_addr.sin_zero, '\0', sizeof my_addr.sin_zero);
 
     bind(socket_listen, (struct sockaddr*)&my_addr, sizeof my_addr);
@@ -351,4 +351,25 @@ int checkduplicatename(char* s, struct chatter* chatters[]) {
         }
     }
     return 1;
+}
+
+
+char * gethostip(){
+    char hostbuffer[256];
+    char *IPbuffer;
+    struct hostent *host_entry;
+    int hostname;
+  
+    // To retrieve hostname
+    hostname = gethostname(hostbuffer, sizeof(hostbuffer));
+    checkHostName(hostname);
+  
+    // To retrieve host information
+    host_entry = gethostbyname(hostbuffer);
+    checkHostEntry(host_entry);
+  
+    // To convert an Internet network
+    // address into ASCII string
+    IPbuffer = inet_ntoa(*((struct in_addr*)
+                           host_entry->h_addr_list[0]));
 }
