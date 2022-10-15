@@ -94,7 +94,6 @@ int main(int argc, char* argv[]) {
                         send(i, data, strlen(data), 0);
                     }
                     else {
-                        printf("wtf");
                         result = registerchatroom(read, chatrooms);
                     }
                     if (result == 0) {
@@ -181,6 +180,7 @@ char* getServerText(struct chatroom* rooms[]) {
 int registerchatroom(char * s, struct chatroom** rooms){
     
     char tokens[4][100];
+    printf("%s", s);
     char* token = strtok(s, "^^^^");
     int i = 0;
     while (token != NULL)
