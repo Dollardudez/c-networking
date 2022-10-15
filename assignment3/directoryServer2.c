@@ -200,7 +200,7 @@ int registerchatroom(char * s, struct chatroom** rooms){
             strncpy(tokens[2], token, strlen(token)+8);
         }
         if (i == 4) {
-            //port
+            //active
             strncpy(tokens[3], token, strlen(token)+8);
             if(strcmp(token, "0") == 0){
 
@@ -209,9 +209,11 @@ int registerchatroom(char * s, struct chatroom** rooms){
                         if (strcmp(rooms[i]->name, tokens[0]) == 0) {
 
                             rooms[i]->active = 0;
+                            
                         }   
                     }                     
                 }
+                printf("%d", rooms[i]->active);
                 return 4;
             }
         }
