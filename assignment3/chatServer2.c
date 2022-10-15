@@ -301,7 +301,7 @@ void registerwithdir(char host[], char port[], char name[], int cmd) {
         return;
     }
     freeaddrinfo(peer_address);
-    char strData[300];
+    char strData[200];
     strncpy(strData, name, sizeof(strData) + 1);
     strcat(strData, "^^^^");
     strcat(strData, host);
@@ -312,6 +312,7 @@ void registerwithdir(char host[], char port[], char name[], int cmd) {
     sprintf(str, "%d", cmd);
     strcat(strData, str);
     send(socket_peer, strData, sizeof(strData) + 1, 0);
+    printf("\nSuccessfully Connected to Directory Server.\n");
 
     while (1) {
 
