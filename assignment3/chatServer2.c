@@ -31,13 +31,14 @@ int main(int argc, char* argv[]) {
     socket_listen = socket(AF_INET, SOCK_STREAM, 0);
     short port;
     sscanf(portcopy, "%hi", &port);
+    printf("here\n");
     my_addr.sin_family = AF_INET;
     my_addr.sin_port = htons(port);     // short, network byte order
     my_addr.sin_addr.s_addr = inet_addr(INADDR_ANY);
     memset(my_addr.sin_zero, '\0', sizeof my_addr.sin_zero);
 
     bind(socket_listen, (struct sockaddr*)&my_addr, sizeof my_addr);
-
+    printf("here\n");
 
     printf("Listening...\n");
     if (listen(socket_listen, 10) < 0) {
@@ -49,8 +50,6 @@ int main(int argc, char* argv[]) {
     socklen_t lendle = sizeof(sin);
     if (getsockname(socket_listen, (struct sockaddr*)&sin, &lendle) == -1)
         perror("getsockname");
-    else
-        printf("port number: %d\n", htons(sin.sin_port));
 
     char text[10];
     printf("here\n");
