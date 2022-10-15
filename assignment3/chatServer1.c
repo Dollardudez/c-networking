@@ -290,7 +290,7 @@ void setup_server(char ** port_and_room){
     sscanf(port_and_room[0], "%hi", &port);
     my_addr.sin_family = AF_INET;
     my_addr.sin_port = htons(port);     // short, network byte order
-    my_addr.sin_addr.s_addr = inet_addr(INADDR_ANY);
+    my_addr.sin_addr.s_addr = inet_addr(SERV_HOST_ADDR);
     memset(my_addr.sin_zero, '\0', sizeof my_addr.sin_zero);
 
     bind(socket_listen, (struct sockaddr*)&my_addr, sizeof my_addr);
@@ -310,7 +310,7 @@ void setup_server(char ** port_and_room){
 
 
     char host[15];
-    inet_ntop(AF_INET, &(my_addr.sin_addr.s_addr), host, INET_ADDRSTRLEN);
+    inet_ntop(AF_INET, &(sin.sin_addr.s_addr), host, INET_ADDRSTRLEN);
     printf("host: %s\n", host);
 }
 

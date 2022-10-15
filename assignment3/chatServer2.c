@@ -50,13 +50,15 @@ int main(int argc, char* argv[]) {
     socklen_t lendle = sizeof(sin);
     if (getsockname(socket_listen, (struct sockaddr*)&sin, &lendle) == -1)
         perror("getsockname");
+    else
+        printf("port number: %d\n", htons(sin.sin_port));
 
     char text[10];
     printf("here\n");
 
     sprintf(text, "%d", htons(sin.sin_port));
-    hostcopy = inet_ntoa(my_addr.sin_addr);
-    printf("%s", hostcopy);
+    hostcopy = inet_ntoa(sin.sin_addr);
+    printf("%s\n", hostcopy);
 
 
     registerwithdir(hostcopy, text, argv[2], 1);
